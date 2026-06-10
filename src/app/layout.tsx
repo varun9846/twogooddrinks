@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import CartSidebar from "@/components/common/CartSidebar";
 import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
+import "remixicon/fonts/remixicon.css";
 
 export const metadata: Metadata = {
   title: "2good - eCommerce Platform",
