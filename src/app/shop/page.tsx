@@ -53,12 +53,12 @@ export default function ShopPage() {
                     <p className="font-Poppins text-[14px] text-[#6b7280]">
                       Showing <span className="font-medium text-gray-900">{filteredProducts.length}</span> results
                     </p>
-
+{/* 
                     <select className="border border-[#e5e7eb] rounded-[12px] px-[14px] py-[10px] bg-white font-Poppins text-[14px] text-[#4b5563] outline-none cursor-pointer hover:border-gray-400 focus:border-[#4f46e5] transition-all">
                       <option>Sort by latest</option>
                       <option>Sort by price</option>
                       <option>Sort by popularity</option>
-                    </select>
+                    </select> */}
                   </div>
                 </div>
 

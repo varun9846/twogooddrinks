@@ -112,7 +112,7 @@ export default function HydrationTipsPage() {
           <div className="space-y-8">
             
             {/* Custom Hydration Calculator Applet */}
-            <div className="rounded-[24px] border border-[#eef0f4] bg-white p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sticky top-8">
+            {/* <div className="rounded-[24px] border border-[#eef0f4] bg-white p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sticky top-8">
               <h3 className="text-[20px] font-bold text-[#2b2b2d] mb-2">Smart Baseline Calculator</h3>
               <p className="text-[14px] leading-[22px] text-[#686e7d] mb-6">
                 Calculate your custom base-level daily water intake recommendations instantly.
@@ -151,7 +151,7 @@ export default function HydrationTipsPage() {
                   </p>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Quick Product Banner */}
             <div className="relative overflow-hidden rounded-[24px] bg-[#2b2b2d] p-8 text-center text-white shadow-xl">
