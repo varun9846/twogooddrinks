@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import apiClient from "@/lib/apiClient";
 
 function RegisterForm() {
   const router = useRouter();
@@ -28,16 +29,13 @@ function RegisterForm() {
     setError(null);
     setIsSubmitting(true);
 
-    const response = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      setError(data.message || "Unable to create account.");
+    try {
+      await apiClient.post("/api/register", form);
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        "Unable to create account.";
+      setError(message);
       setIsSubmitting(false);
       return;
     }

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductCard from "@/components/shop/ProductCard";
 import ProductActions from "@/components/shop/ProductActions";
-import { getProductById, getRelatedProducts, products } from "@/lib/products";
+import { getRelatedProducts, products } from "@/lib/products";
+import { productsService } from "@/lib/services/productsService";
 
 interface ProductDetailsPageProps {
   params: Promise<{
@@ -18,7 +19,8 @@ export function generateStaticParams() {
 
 export default async function ProductDetailsPage({ params }: ProductDetailsPageProps) {
   const { productId } = await params;
-  const product = getProductById(productId);
+  const data = await productsService.getProductById(productId);
+  const product = data?.product ?? null;
 
   if (!product) {
     notFound();
@@ -96,14 +98,14 @@ export default async function ProductDetailsPage({ params }: ProductDetailsPageP
         </div>
       </section>
 
-      {relatedProducts.length > 0 ? (
+      {relatedProducts?.length > 0 ? (
         <section className="pb-[60px]">
           <div className="mx-auto px-[12px] min-[1400px]:max-w-[1320px] min-[1200px]:max-w-[1140px] min-[992px]:max-w-[960px] min-[768px]:max-w-[720px] min-[576px]:max-w-[540px]">
             <div className="mb-[28px] text-center">
               <h2 className="font-quicksand text-[30px] font-bold text-[#3d4750]">Related Products</h2>
             </div>
             <div className="grid grid-cols-1 gap-[24px] min-[576px]:grid-cols-2 min-[992px]:grid-cols-4">
-              {relatedProducts.map((relatedProduct) => (
+              {relatedProducts?.map((relatedProduct) => (
                 <ProductCard key={relatedProduct.id} product={relatedProduct} />
               ))}
             </div>

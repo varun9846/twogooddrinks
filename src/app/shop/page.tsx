@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductCard from "@/components/shop/ProductCard";
-import { productCategories, products, productTags } from "@/lib/products";
+import type { Product } from "@/lib/products";
+import { productsService } from "@/lib/services/productsService";
 
 function getPriceNumber(price: string) {
   return Number(price.replace(/[^0-9.]/g, "")) || 0;
@@ -14,6 +15,9 @@ export default function ShopPage() {
   const [selectedPrices, setSelectedPrices] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("latest");
+  const [productsState, setProductsState] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory((prev) => (prev === category ? null : category));
@@ -40,7 +44,7 @@ export default function ShopPage() {
   };
 
   const filteredAndSortedProducts = useMemo(() => {
-    let result = [...products];
+    let result = [...productsState];
 
     if (searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
@@ -85,10 +89,51 @@ export default function ShopPage() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, selectedPrices, selectedTags, sortBy]);
+  }, [productsState, searchQuery, selectedCategory, selectedPrices, selectedTags, sortBy]);
 
   const hasActiveFilters =
     Boolean(searchQuery) || selectedCategory || selectedPrices.length > 0 || selectedTags.length > 0;
+
+  const productCategories = useMemo(() => {
+    return Array.from(new Set(productsState.map((p) => p.product_category)));
+  }, [productsState]);
+
+  const productTags = useMemo(() => {
+    return Array.from(new Set(productsState.map((p) => p.Tag)));
+  }, [productsState]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await productsService.getAllProducts();
+        if (!cancelled) {
+          if (data?.success && Array.isArray(data.products)) {
+            setProductsState(data.products);
+            setError(null);
+          } else {
+            setProductsState([]);
+            setError('Failed to load products');
+          }
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setError('Failed to load products');
+          setProductsState([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <main>
@@ -148,7 +193,7 @@ export default function ShopPage() {
                               isSelected ? "bg-[#4f46e5] text-white" : "bg-[#f3f4f6] text-[#6b7280]"
                             }`}
                           >
-                            {products.filter((product) => product.product_category === category).length}
+                            {productsState.filter((product) => product.product_category === category).length}
                           </span>
                         </li>
                       );
@@ -215,7 +260,7 @@ export default function ShopPage() {
             <div className="min-[992px]:w-[75%] w-full px-[12px] order-1 max-[991px]:order-2">
               <div className="mb-[24px] flex flex-wrap items-center justify-between gap-[16px] rounded-[20px] border border-[#e5e7eb] bg-white p-[18px] shadow-sm">
                 <p className="font-Poppins text-[14px] text-[#686e7d]">
-                  Showing <span className="font-semibold text-[#3d4750]">{filteredAndSortedProducts.length}</span> products
+                  Showing <span className="font-semibold text-[#3d4750]">{filteredAndSortedProducts?.length}</span> products
                 </p>
 
                 <select
@@ -230,9 +275,9 @@ export default function ShopPage() {
                 </select>
               </div>
 
-              {filteredAndSortedProducts.length > 0 ? (
+              {filteredAndSortedProducts?.length > 0 ? (
                 <div className="grid grid-cols-1 gap-[24px] min-[576px]:grid-cols-2 min-[1200px]:grid-cols-3">
-                  {filteredAndSortedProducts.map((product) => (
+                  {filteredAndSortedProducts?.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
                 </div>

@@ -1,16 +1,16 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { getCart } from "@/lib/cart";
+import { jsonError, jsonSuccess } from "@/lib/utils/api-response";
+import { getAuthenticatedUserId } from "@/lib/utils/auth";
+import cartService from "@/lib/services/cart.service";
 
 export async function GET() {
-  const session = await auth();
+  const userId = await getAuthenticatedUserId();
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  if (!userId) {
+    return jsonError("Unauthorized", 401);
   }
 
-  const cart = await getCart(session.user.id);
-  return NextResponse.json({ cart });
+  const cart = await cartService.getCart(userId);
+  return jsonSuccess({ cart });
 }

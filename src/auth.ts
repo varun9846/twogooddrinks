@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { getUserByEmail } from "@/lib/users";
+import userService from "@/lib/services/user.service";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
@@ -25,7 +25,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const user = await getUserByEmail(email);
+        const user = await userService.getUserByEmail(email);
 
         if (!user) {
           return null;
@@ -41,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user.id,
           name: user.name,
           email: user.email,
-          phone_number: user.phone_number,
+          phone_number: user.phoneNumber,
           address: user.address,
         };
       },

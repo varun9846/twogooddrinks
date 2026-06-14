@@ -1,26 +1,28 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
-import { createUser } from "@/lib/users";
+import { getErrorMessage, jsonError, jsonSuccess } from "@/lib/utils/api-response";
+import { parseRequestString } from "@/lib/utils/numbers";
+import userService from "@/lib/services/user.service";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const user = await createUser({
-      name: String(body.name || ""),
-      email: String(body.email || ""),
-      password: String(body.password || ""),
-      phone_number: body.phone_number ? String(body.phone_number) : undefined,
-      address: body.address ? String(body.address) : undefined,
+    const user = await userService.createUser({
+      name: parseRequestString(body.name),
+      email: parseRequestString(body.email),
+      password: parseRequestString(body.password),
+      phone_number: body.phone_number ? parseRequestString(body.phone_number) : undefined,
+      address: body.address ? parseRequestString(body.address) : undefined,
     });
 
-    return NextResponse.json({
-      message: "Account created successfully.",
-      user,
-    }, { status: 201 });
+    return jsonSuccess(
+      {
+        message: "Account created successfully.",
+        user,
+      },
+      201,
+    );
   } catch (error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : "Unable to create account.",
-    }, { status: 400 });
+    return jsonError(getErrorMessage(error, "Unable to create account."));
   }
 }

@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { products } from "@/lib/products";
+import { useEffect, useMemo, useState } from "react";
+import { productsService, type ProductApiResponse } from "@/lib/services/productsService";
 
 const categories = [
   {
@@ -50,7 +53,7 @@ function SectionHeading({
   );
 }
 
-function HomeProductCard({ product }: { product: (typeof products)[number] }) {
+function HomeProductCard({ product }: { product: ProductApiResponse }) {
   return (
     <article className="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
       <div className="relative overflow-hidden border-b border-slate-100 bg-[#f8f8fb]">
@@ -103,6 +106,32 @@ function HomeProductCard({ product }: { product: (typeof products)[number] }) {
 }
 
 export default function HomePage() {
+  const [products, setProducts] = useState<ProductApiResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProducts() {
+      try {
+        const data = await productsService.getAllProducts();
+        if (!cancelled && data?.success && Array.isArray(data.products)) {
+          setProducts(data.products);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadProducts();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const featuredProducts = useMemo(() => products.slice(0, 4), [products]);
+  const newArrivals = useMemo(() => products.slice(8, 12), [products]);
+
   return (
     <main className="pb-16">
       <section className="overflow-hidden bg-[#f6f7ff]">
@@ -186,11 +215,15 @@ export default function HomePage() {
             title="Customer favorites for taste, hydration, and everyday health."
           />
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {products.slice(0, 4).map((product) => (
-              <HomeProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-center text-sm text-slate-500">Loading featured products…</p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {featuredProducts.map((product) => (
+                <HomeProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
 
           <div className="mt-10 text-center">
             <Link
@@ -255,11 +288,15 @@ export default function HomePage() {
           title="Freshly added drinks, herbs, and healthier essentials."
         />
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {products.slice(8, 12).map((product) => (
-            <HomeProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-center text-sm text-slate-500">Loading new arrivals…</p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {newArrivals.map((product) => (
+              <HomeProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pb-12 pt-16 md:px-6">

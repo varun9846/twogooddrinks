@@ -7,6 +7,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+
   return (
     <div className="bb-pro-box bg-[#fff] border border-[#eee] rounded-[20px] overflow-hidden transition-all duration-300 hover:shadow-md">
       <div className="bb-pro-img relative overflow-hidden border-b border-[#eee]">

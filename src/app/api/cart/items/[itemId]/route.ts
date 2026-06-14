@@ -1,8 +1,9 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { removeCartItem, updateCartItem } from "@/lib/cart";
+import { getErrorMessage, jsonError, jsonSuccess } from "@/lib/utils/api-response";
+import { getAuthenticatedUserId } from "@/lib/utils/auth";
+import { parseRequestNumber } from "@/lib/utils/numbers";
+import cartService from "@/lib/services/cart.service";
 
 interface RouteContext {
   params: Promise<{
@@ -12,40 +13,39 @@ interface RouteContext {
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
-    const session = await auth();
+    const userId = await getAuthenticatedUserId();
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!userId) {
+      return jsonError("Unauthorized", 401);
     }
 
     const { itemId } = await context.params;
     const body = await request.json();
-    const quantity = Number(body.quantity || 0);
-    const cart = await updateCartItem(session.user.id, itemId, quantity);
+    const cart = await cartService.updateCartItem(
+      userId,
+      itemId,
+      parseRequestNumber(body.quantity, 0),
+    );
 
-    return NextResponse.json({ message: "Cart updated.", cart });
+    return jsonSuccess({ message: "Cart updated.", cart });
   } catch (error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : "Unable to update cart item.",
-    }, { status: 400 });
+    return jsonError(getErrorMessage(error, "Unable to update cart item."));
   }
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
   try {
-    const session = await auth();
+    const userId = await getAuthenticatedUserId();
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    if (!userId) {
+      return jsonError("Unauthorized", 401);
     }
 
     const { itemId } = await context.params;
-    const cart = await removeCartItem(session.user.id, itemId);
+    const cart = await cartService.removeCartItem(userId, itemId);
 
-    return NextResponse.json({ message: "Item removed from cart.", cart });
+    return jsonSuccess({ message: "Item removed from cart.", cart });
   } catch (error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : "Unable to remove cart item.",
-    }, { status: 400 });
+    return jsonError(getErrorMessage(error, "Unable to remove cart item."));
   }
 }

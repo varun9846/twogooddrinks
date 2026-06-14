@@ -1,30 +1,33 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { addToCart } from "@/lib/cart";
+import { getErrorMessage, jsonError, jsonSuccess } from "@/lib/utils/api-response";
+import { getAuthenticatedUserId } from "@/lib/utils/auth";
+import { parseRequestNumber, parseRequestString } from "@/lib/utils/numbers";
+import cartService from "@/lib/services/cart.service";
 
 export async function POST(request: Request) {
   try {
-    const session = await auth();
+    const userId = await getAuthenticatedUserId();
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ message: "Please login first." }, { status: 401 });
+    if (!userId) {
+      return jsonError("Please login first.", 401);
     }
 
     const body = await request.json();
-    const productId = String(body.productId || "");
-    const quantity = Number(body.quantity || 1);
+    const productId = parseRequestString(body.productId);
 
     if (!productId) {
-      return NextResponse.json({ message: "Product id is required." }, { status: 400 });
+      return jsonError("Product id is required.");
     }
 
-    const cart = await addToCart(session.user.id, productId, quantity);
-    return NextResponse.json({ message: "Product added to cart.", cart });
+    const cart = await cartService.addToCart(
+      userId,
+      productId,
+      parseRequestNumber(body.quantity, 1),
+    );
+
+    return jsonSuccess({ message: "Product added to cart.", cart });
   } catch (error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : "Unable to add product to cart.",
-    }, { status: 400 });
+    return jsonError(getErrorMessage(error, "Unable to add product to cart."));
   }
 }

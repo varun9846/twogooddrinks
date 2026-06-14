@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Cart } from "@/types/cart";
+import apiClient from "@/lib/apiClient";
 
 interface CartState {
   cart: Cart | null;
@@ -12,11 +13,16 @@ interface CartState {
   clearLocalCart: () => void;
 }
 
-async function parseResponse(response: Response) {
-  const data = await response.json().catch(() => ({}));
+type CartResponse = {
+  message?: string;
+  cart?: Cart | null;
+};
 
-  if (!response.ok) {
-    throw new Error(data.message || "Something went wrong.");
+async function parseResponse(response: { data?: CartResponse }): Promise<CartResponse> {
+  const data = response?.data ?? {};
+
+  if (data.message && !data.cart) {
+    throw new Error(data.message);
   }
 
   return data;
@@ -31,10 +37,11 @@ export const useCartStore = create<CartState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch("/api/cart", { cache: "no-store" });
+      const response = await apiClient.get("/api/cart", { headers: { "Cache-Control": "no-store" } });
       const data = await parseResponse(response);
-      set({ cart: data.cart, isLoading: false });
-      return data.cart;
+      const cart = data.cart ?? null;
+      set({ cart, isLoading: false });
+      return cart;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to load cart.";
       set({ error: message, isLoading: false });
@@ -46,14 +53,11 @@ export const useCartStore = create<CartState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch("/api/cart/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId, quantity }),
-      });
+      const response = await apiClient.post("/api/cart/add", { productId, quantity });
       const data = await parseResponse(response);
-      set({ cart: data.cart, isLoading: false });
-      return data.cart;
+      const cart = data.cart ?? null;
+      set({ cart, isLoading: false });
+      return cart;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to add product.";
       set({ error: message, isLoading: false });
@@ -65,14 +69,11 @@ export const useCartStore = create<CartState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch(`/api/cart/items/${itemId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity }),
-      });
+      const response = await apiClient.patch(`/api/cart/items/${itemId}`, { quantity });
       const data = await parseResponse(response);
-      set({ cart: data.cart, isLoading: false });
-      return data.cart;
+      const cart = data.cart ?? null;
+      set({ cart, isLoading: false });
+      return cart;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to update item.";
       set({ error: message, isLoading: false });
@@ -84,12 +85,11 @@ export const useCartStore = create<CartState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await fetch(`/api/cart/items/${itemId}`, {
-        method: "DELETE",
-      });
+      const response = await apiClient.delete(`/api/cart/items/${itemId}`);
       const data = await parseResponse(response);
-      set({ cart: data.cart, isLoading: false });
-      return data.cart;
+      const cart = data.cart ?? null;
+      set({ cart, isLoading: false });
+      return cart;
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unable to remove item.";
       set({ error: message, isLoading: false });
