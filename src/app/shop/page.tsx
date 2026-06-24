@@ -10,7 +10,6 @@ function getPriceNumber(price: string) {
 }
 
 export default function ShopPage() {
-
   //// Make 1 state for page and use it for all. if need only only then make new state.
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -27,7 +26,9 @@ export default function ShopPage() {
 
   const handlePriceChange = (range: string) => {
     setSelectedPrices((prev) =>
-      prev.includes(range) ? prev.filter((item) => item !== range) : [...prev, range],
+      prev.includes(range)
+        ? prev.filter((item) => item !== range)
+        : [...prev, range],
     );
   };
 
@@ -51,7 +52,12 @@ export default function ShopPage() {
     if (searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
       result = result.filter((product) =>
-        [product.product_name, product.product_description, product.product_category, product.Tag]
+        [
+          product.product_name,
+          product.product_description,
+          product.product_category,
+          product.Tag,
+        ]
           .join(" ")
           .toLowerCase()
           .includes(query),
@@ -59,7 +65,9 @@ export default function ShopPage() {
     }
 
     if (selectedCategory) {
-      result = result.filter((product) => product.product_category === selectedCategory);
+      result = result.filter(
+        (product) => product.product_category === selectedCategory,
+      );
     }
 
     if (selectedTags.length > 0) {
@@ -91,11 +99,21 @@ export default function ShopPage() {
     }
 
     return result;
-  }, [productsState, searchQuery, selectedCategory, selectedPrices, selectedTags, sortBy]);
+  }, [
+    productsState,
+    searchQuery,
+    selectedCategory,
+    selectedPrices,
+    selectedTags,
+    sortBy,
+  ]);
 
   // runs on every user intratction
   const hasActiveFilters =
-    Boolean(searchQuery) || selectedCategory || selectedPrices.length > 0 || selectedTags.length > 0;
+    Boolean(searchQuery) ||
+    selectedCategory ||
+    selectedPrices.length > 0 ||
+    selectedTags.length > 0;
 
   const productCategories = useMemo(() => {
     return Array.from(new Set(productsState.map((p) => p.product_category)));
@@ -118,12 +136,12 @@ export default function ShopPage() {
             setError(null);
           } else {
             setProductsState([]);
-            setError('Failed to load products');
+            setError("Failed to load products");
           }
         }
       } catch (error) {
         if (!cancelled) {
-          setError('Failed to load products');
+          setError("Failed to load products");
           setProductsState([]);
         }
       } finally {
@@ -136,7 +154,7 @@ export default function ShopPage() {
     return () => {
       cancelled = true;
     };
-  }, []); 
+  }, []);
 
   return (
     <main>
@@ -147,10 +165,11 @@ export default function ShopPage() {
               Hydrate • Heal • Feel Good
             </p>
             <h1 className="font-quicksand text-[34px] max-[767px]:text-[28px] font-bold text-[#3d4750] mb-[10px]">
-              Shop Wellness Products
+              Pure Hydration, Delivered Fresh
             </h1>
             <p className="font-Poppins text-[15px] text-[#686e7d] max-w-[620px] mx-auto leading-[26px]">
-              Explore natural hydration products, jeera drinks, herbal infusions, and healthy daily essentials.
+              Premium packaged drinking water for homes, offices, events, and
+              businesses{" "}
             </p>
           </div>
 
@@ -181,30 +200,39 @@ export default function ShopPage() {
                           key={category}
                           onClick={() => handleCategoryClick(category)}
                           className={`flex items-center justify-between py-[10px] px-[8px] rounded-[8px] cursor-pointer transition-all ${
-                            isSelected ? "bg-indigo-50/80" : "hover:bg-[#f9fafb]"
+                            isSelected
+                              ? "bg-indigo-50/80"
+                              : "hover:bg-[#f9fafb]"
                           }`}
                         >
                           <span
                             className={`font-Poppins text-[14px] transition-colors ${
-                              isSelected ? "text-[#4f46e5] font-medium" : "text-[#4b5563]"
+                              isSelected
+                                ? "text-[#4f46e5] font-medium"
+                                : "text-[#4b5563]"
                             }`}
                           >
                             {category}
                           </span>
                           <span
                             className={`font-Poppins text-[12px] font-medium px-[8px] py-[2px] rounded-full transition-colors ${
-                              isSelected ? "bg-[#4f46e5] text-white" : "bg-[#f3f4f6] text-[#6b7280]"
+                              isSelected
+                                ? "bg-[#4f46e5] text-white"
+                                : "bg-[#f3f4f6] text-[#6b7280]"
                             }`}
                           >
-                            {productsState.filter((product) => product.product_category === category).length}
+                            {
+                              productsState.filter(
+                                (product) =>
+                                  product.product_category === category,
+                              ).length
+                            }
                           </span>
                         </li>
                       );
                     })}
                   </ul>
                 </div>
-
-                
 
                 <div className="sidebar-block bg-white border border-[#e5e7eb] rounded-[20px] p-[24px] shadow-sm">
                   <h4 className="font-quicksand text-[18px] font-bold text-[#1f2937] mb-[18px]">
@@ -246,7 +274,11 @@ export default function ShopPage() {
             <div className="min-[992px]:w-[75%] w-full px-[12px] order-1 max-[991px]:order-2">
               <div className="mb-[24px] flex flex-wrap items-center justify-between gap-[16px] rounded-[20px] border border-[#e5e7eb] bg-white p-[18px] shadow-sm">
                 <p className="font-Poppins text-[14px] text-[#686e7d]">
-                  Showing <span className="font-semibold text-[#3d4750]">{filteredAndSortedProducts?.length}</span> products
+                  Showing{" "}
+                  <span className="font-semibold text-[#3d4750]">
+                    {filteredAndSortedProducts?.length}
+                  </span>{" "}
+                  products
                 </p>
 
                 <select
@@ -269,7 +301,9 @@ export default function ShopPage() {
                 </div>
               ) : (
                 <div className="rounded-[20px] border border-[#e5e7eb] bg-white py-[60px] text-center">
-                  <p className="font-Poppins text-[16px] text-[#6b7280]">No products match your search criteria.</p>
+                  <p className="font-Poppins text-[16px] text-[#6b7280]">
+                    No products match your search criteria.
+                  </p>
                 </div>
               )}
             </div>
