@@ -107,11 +107,11 @@ export default function HomePage() {
           <img
             src={homeContent.hero.image}
             alt="2goodplus packaged drinking water"
-            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-100 sm:object-center sm:opacity-100"
+            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-35 sm:object-center sm:opacity-100"
           />
 
-          {/* <div className="absolute inset-0 sm:bg-gradient-to-r sm:from-white/95" /> */}
-          <div className="absolute inset-y-0 left-0 w-full sm:w-[60%] bg-gradient-to-r from-white via-white/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/82 to-white/55 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/65 sm:to-transparent" />
+
           <div className="relative z-10 mx-auto flex min-h-[unset] max-w-7xl items-center px-4 py-10 sm:min-h-[420px] sm:px-6 sm:py-14 lg:min-h-[500px] lg:py-16">
             <div className="w-full max-w-[620px] text-center sm:text-left">
               <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#0f766e] sm:mb-4 sm:text-sm">
@@ -145,30 +145,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <WaterWaveDivider />
-      {/* 
-      <section className="relative z-10 mx-auto mt-2 max-w-7xl px-4 md:px-6">
-        <div className="grid gap-4 rounded-[28px] bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:grid-cols-2 lg:grid-cols-4">
-          {homeContent.trustStats.map((stat) => (
-            <div
-              key={stat.title}
-              className="flex flex-col items-start gap-4 rounded-[20px] border border-slate-100 bg-white p-4 sm:flex-row sm:items-center"
-            >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#0f766e]/10 text-xl text-[#0f766e]">
-                {stat.icon}
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">
-                  {stat.title}
-                </p>
-                <p className="mt-1 text-xs text-slate-500">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
-
+  
       <WaterWaveDivider />
 
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
@@ -361,7 +338,7 @@ export default function HomePage() {
             alt="Bulk packaged water delivery"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-        
+
           <div className="absolute inset-0 bg-gradient-to-r from-[#fff7ea]/95 via-[#fff7ea]/80 to-transparent sm:from-[#fff7ea]/90"></div>
 
           <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
