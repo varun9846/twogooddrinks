@@ -61,6 +61,16 @@ img {
 .sidebar-transition {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+/* Add this at the bottom of globals.css */
+@keyframes wave-ripple {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-wave-ripple {
+  animation: wave-ripple 15s linear infinite;
+  will-change: transform;
+}
 
 
 .water-ripple {
@@ -159,3 +169,5 @@ img {
     transform: translateY(520px) rotate(-45deg);
   }
 }
+
+

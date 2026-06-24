@@ -48,8 +48,6 @@ package.json
 prisma/schema.prisma
 README.md
 sql/01_schema.sql
-sql/02_seed_products.sql
-sql/03_seed_test_user.sql
 src/app/(auth)/login/page.tsx
 src/app/(auth)/register/page.tsx
 src/app/about-us/page.tsx
@@ -110,6 +108,111 @@ tsconfig.json
 ```
 
 # Files
+
+## File: AGENTS.md
+````markdown
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+````
+
+## File: architecture.md
+````markdown
+src/
+├── app/                           # App Router Core
+│   ├── layout.tsx                 # Root layout (Includes global Providers, Header, Footer)
+│   ├── page.tsx                   # Homepage (index.html)
+│   ├── (auth)/                    # Auth Route Group
+│   │   ├── login/page.tsx         # login.html
+│   │   └── register/page.tsx      # register.html
+│   ├── shop/
+│   │   ├── page.tsx               # Shop Catalog (Grid/List views)
+│   │   └── [productId]/page.tsx   # Dynamic Product Details
+│   ├── cart/page.tsx              # cart.html
+│   ├── checkout/page.tsx          # checkout.html
+│   └── api/                       # Next.js Route Handlers (BFF layer)
+├── components/                    # Modular UI Component Layer
+│   ├── common/                    # Header, Footer, Custom Selectors
+│   ├── product/                   # ProductCard, ProductGrid, Rating
+│   ├── cart/                      # CartSidebar overlay
+│   └── ui/                        # Reusable Primitive Elements (Buttons, Inputs)
+├── store/                         # Global State Management (Zustand or React Context)
+│   ├── useCartStore.ts            # Client-side Cart state & persistent sync
+│   └── useWishlistStore.ts        # Client-side Wishlist state
+└── styles/
+    └── globals.css                # Custom Tailwind layer directives
+````
+
+## File: eslint.config.mjs
+````javascript
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+````
+
+## File: README.md
+````markdown
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+````
+
+## File: src/app/api/auth/[...nextauth]/route.ts
+````typescript
+export const runtime = "nodejs";
+import { handlers } from "@/auth";
+export const { GET, POST } = handlers;
+````
 
 ## File: src/components/common/DeliveryCoverage.tsx
 ````typescript
@@ -245,158 +348,6 @@ export default function WaterWaveDivider() {
 }
 ````
 
-## File: AGENTS.md
-````markdown
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-````
-
-## File: architecture.md
-````markdown
-src/
-├── app/                           # App Router Core
-│   ├── layout.tsx                 # Root layout (Includes global Providers, Header, Footer)
-│   ├── page.tsx                   # Homepage (index.html)
-│   ├── (auth)/                    # Auth Route Group
-│   │   ├── login/page.tsx         # login.html
-│   │   └── register/page.tsx      # register.html
-│   ├── shop/
-│   │   ├── page.tsx               # Shop Catalog (Grid/List views)
-│   │   └── [productId]/page.tsx   # Dynamic Product Details
-│   ├── cart/page.tsx              # cart.html
-│   ├── checkout/page.tsx          # checkout.html
-│   └── api/                       # Next.js Route Handlers (BFF layer)
-├── components/                    # Modular UI Component Layer
-│   ├── common/                    # Header, Footer, Custom Selectors
-│   ├── product/                   # ProductCard, ProductGrid, Rating
-│   ├── cart/                      # CartSidebar overlay
-│   └── ui/                        # Reusable Primitive Elements (Buttons, Inputs)
-├── store/                         # Global State Management (Zustand or React Context)
-│   ├── useCartStore.ts            # Client-side Cart state & persistent sync
-│   └── useWishlistStore.ts        # Client-side Wishlist state
-└── styles/
-    └── globals.css                # Custom Tailwind layer directives
-````
-
-## File: eslint.config.mjs
-````javascript
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
-
-export default eslintConfig;
-````
-
-## File: README.md
-````markdown
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-````
-
-## File: sql/02_seed_products.sql
-````sql
-INSERT INTO products (id, product_name, product_description, product_category, price, stock, image, badge, tag)
-VALUES
-  ('pure-spring-water-daily-pack', 'Pure Spring Water Daily Pack', 'Clean and refreshing bottled water for everyday hydration.', 'Natural Drinking Water', 15, 24, '/assets/img/new-product/1.jpg', 'New', 'Hydration'),
-  ('roofaza-jeera-refresh-drink', 'Roofaza Jeera Refresh Drink', 'A refreshing cumin-based drink crafted for flavorful hydration.', 'Jeera Drink', 25, 18, '/assets/img/new-product/2.jpg', 'Popular', 'Wellness Drink'),
-  ('blueberry-jeera-crunch-mix', 'BlueBerry Jeera Crunch Mix', 'Light, flavorful snack bites for mindful everyday munching.', 'Healthy Snacks', 10, 30, '/assets/img/new-product/3.jpg', 'Best Seller', 'Snack'),
-  ('calm-herbal-orange-refill-pack', 'Calm Herbal Orange Refill Pack', 'A soothing infusion blend made for restful, calming moments.', 'Herbal Infusion', 25, 16, '/assets/img/new-product/4.jpg', 'New', 'Herbal'),
-  ('avacardo-cumin-wellness-jar', 'Avacardo Cumin Wellness Jar', 'Pantry essential made to elevate wellness drinks and recipes.', 'Wellness Jar', 32, 14, '/assets/img/new-product/5.jpg', 'Trending', 'Wellness'),
-  ('cardamom-herbal-tea-blend', 'Cardamom Herbal Tea Blend', 'A warm and aromatic blend perfect for daily tea rituals.', 'Herbal Tea', 41, 20, '/assets/img/new-product/6.jpg', 'Premium', 'Tea'),
-  ('spiced-millet-energy-bites', 'Spiced Millet Energy Bites', 'Nutritious crunchy bites made for wholesome snacking.', 'Healthy Snacks', 29, 22, '/assets/img/new-product/7.jpg', 'Hot', 'Energy'),
-  ('date-sweetened-wellness-dip', 'Date Sweetened Wellness Dip', 'Naturally sweet dip for healthy snack platters and light bites.', 'Wellness Dip', 9, 12, '/assets/img/new-product/8.jpg', 'Sale', 'Dip'),
-  ('daily-hydration-combo-pack', 'Daily Hydration Combo Pack', 'A convenient starter bundle with everyday wellness essentials.', 'Combo Pack', 35, 10, '/assets/img/new-product/10.jpg', 'Combo', 'Hydration'),
-  ('lemon-jeera-spark-drink', 'Lemon Jeera Spark Drink', 'Bright citrus flavor paired with a refreshing jeera twist.', 'Jeera Drink', 22, 26, '/assets/img/new-product/11.jpg', 'Fresh', 'Citrus'),
-  ('herb-crisp-snack-box', 'Herb Crisp Snack Box', 'Oven-crisp savory snack box with balanced herbal seasoning.', 'Healthy Snacks', 18, 28, '/assets/img/new-product/12.jpg', 'New', 'Snack'),
-  ('velvet-herbal-trail-mix', 'Velvet Herbal Trail Mix', 'Crunchy snack blend for smart and satisfying snacking breaks.', 'Trail Mix', 25, 15, '/assets/img/new-product/13.jpg', 'Popular', 'Trail Mix')
-ON CONFLICT (id) DO UPDATE SET
-  product_name = EXCLUDED.product_name,
-  product_description = EXCLUDED.product_description,
-  product_category = EXCLUDED.product_category,
-  price = EXCLUDED.price,
-  stock = EXCLUDED.stock,
-  image = EXCLUDED.image,
-  badge = EXCLUDED.badge,
-  tag = EXCLUDED.tag,
-  updated_at = NOW();
-````
-
-## File: sql/03_seed_test_user.sql
-````sql
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-INSERT INTO users (name, email, password, phone_number, address)
-VALUES (
-  'Test Customer',
-  'customer@twogood.test',
-  crypt('Password@123', gen_salt('bf')),
-  '+96898060405',
-  'Muscat, Oman'
-)
-ON CONFLICT (email) DO UPDATE SET
-  name = EXCLUDED.name,
-  password = EXCLUDED.password,
-  phone_number = EXCLUDED.phone_number,
-  address = EXCLUDED.address,
-  updated_at = NOW();
-````
-
-## File: src/app/api/auth/[...nextauth]/route.ts
-````typescript
-export const runtime = "nodejs";
-import { handlers } from "@/auth";
-export const { GET, POST } = handlers;
-````
-
 ## File: src/components/providers/AuthProvider.tsx
 ````typescript
 "use client";
@@ -463,32 +414,6 @@ export function mapOrderItemsToCart(
 }
 export function emptyCart(): Cart {
   return mapOrderItemsToCart(null, [], 0);
-}
-````
-
-## File: src/lib/mappers/product.mapper.ts
-````typescript
-import type { Product } from "@prisma/client";
-import type { ProductDto } from "@/types/product";
-import { formatPrice, toNumber } from "@/lib/utils/numbers";
-export function toProductDto(product: Product): ProductDto {
-  return {
-    id: product.id,
-    product_name: product.productName,
-    product_description: product.productDescription,
-    product_category: product.productCategory,
-    price: formatPrice(product.price),
-    Stock: product.stock,
-    image: product.image,
-    Badge: product.badge ?? undefined,
-    Tag: product.tag ?? "",
-  };
-}
-export function toProductDtoList(products: Product[]): ProductDto[] {
-  return products.map(toProductDto);
-}
-export function getLineTotal(quantity: number, price: Product["price"]): number {
-  return toNumber(price) * quantity;
 }
 ````
 
@@ -695,30 +620,6 @@ export const cartService = {
 export default cartService;
 ````
 
-## File: src/lib/services/product.service.ts
-````typescript
-import { toProductDto, toProductDtoList } from "@/lib/mappers/product.mapper";
-import { prisma } from "@/lib/prisma";
-import type { ProductDto } from "@/types/product";
-export async function getAllProducts(): Promise<ProductDto[]> {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-  return toProductDtoList(products);
-}
-export async function getProductById(productId: string): Promise<ProductDto | null> {
-  const product = await prisma.product.findUnique({
-    where: { id: productId },
-  });
-  return product ? toProductDto(product) : null;
-}
-export const productService = {
-  getAllProducts,
-  getProductById,
-};
-export default productService;
-````
-
 ## File: src/lib/services/productsService.ts
 ````typescript
 import apiClient from "@/lib/apiClient";
@@ -825,28 +726,6 @@ export async function requireAuthenticatedUserId(): Promise<string> {
     throw new Error("Unauthorized");
   }
   return userId;
-}
-````
-
-## File: src/lib/utils/numbers.ts
-````typescript
-export function toNumber(value: string | number | null | undefined): number {
-  return Number(value ?? 0);
-}
-export function roundCurrency(value: number): number {
-  return Number(value.toFixed(2));
-}
-export function formatPrice(value: string | number): string {
-  return `$${toNumber(value)}`;
-}
-export function clampQuantity(quantity: number, minimum = 1): number {
-  return Math.max(minimum, Number(quantity || minimum));
-}
-export function parseRequestString(value: unknown, fallback = ""): string {
-  return String(value ?? fallback);
-}
-export function parseRequestNumber(value: unknown, fallback = 0): number {
-  return Number(value ?? fallback);
 }
 ````
 
@@ -988,31 +867,6 @@ declare module "next-auth/jwt" {
     phone_number?: string | null;
     address?: string | null;
   }
-}
-````
-
-## File: src/types/product.ts
-````typescript
-export interface ProductDto {
-  id: string;
-  product_name: string;
-  product_description: string;
-  product_category: string;
-  price: string;
-  Stock: number;
-  image: string;
-  Badge?: string;
-  Tag: string;
-}
-export interface ProductsListResponse {
-  success: boolean;
-  products: ProductDto[];
-  product?: ProductDto | null;
-}
-export interface ProductDetailResponse {
-  success: boolean;
-  product: ProductDto | null;
-  products: ProductDto[];
 }
 ````
 
@@ -2152,162 +2006,6 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ````
 
-## File: prisma/schema.prisma
-````prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
-enum OrderStatus {
-  paid
-  pending
-  failed
-}
-
-model User {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String   @db.VarChar(150)
-  email       String   @unique @db.VarChar(255)
-  password    String
-  phoneNumber String?  @map("phone_number") @db.VarChar(50)
-  address     String?
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  orders      Order[]
-
-  @@map("users")
-}
-
-model Product {
-  id                  String      @id
-  productName         String      @map("product_name") @db.VarChar(255)
-  productDescription  String      @map("product_description")
-  productCategory     String      @map("product_category") @db.VarChar(150)
-  price               Decimal     @db.Decimal(10, 2)
-  stock               Int         @default(0)
-  image               String
-  badge               String?     @db.VarChar(80)
-  tag                 String?     @db.VarChar(100)
-  createdAt           DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  orderItems          OrderItem[]
-
-  @@map("products")
-}
-
-model Order {
-  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId    String      @map("user_id") @db.Uuid
-  total     Decimal     @default(0) @db.Decimal(10, 2)
-  status    OrderStatus @default(pending)
-  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     OrderItem[]
-
-  @@index([userId, status])
-  @@map("orders")
-}
-
-model OrderItem {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  orderId   String   @map("order_id") @db.Uuid
-  productId String   @map("product_id")
-  quantity  Int      @default(1)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-
-  @@unique([orderId, productId])
-  @@index([orderId])
-  @@index([productId])
-  @@map("order_items")
-}
-````
-
-## File: sql/01_schema.sql
-````sql
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE TABLE IF NOT EXISTS users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(150) NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  password TEXT NOT NULL,
-  phone_number VARCHAR(50),
-  address TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE TABLE IF NOT EXISTS products (
-  id VARCHAR(255) PRIMARY KEY,
-  product_name VARCHAR(255) NOT NULL,
-  product_description TEXT NOT NULL,
-  product_category VARCHAR(150) NOT NULL,
-  price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
-  stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
-  image TEXT NOT NULL,
-  badge VARCHAR(80),
-  tag VARCHAR(100),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE TABLE IF NOT EXISTS orders (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  total NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (total >= 0),
-  status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('paid', 'pending', 'failed')),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE TABLE IF NOT EXISTS order_items (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-  product_id VARCHAR(255) NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
-  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE(order_id, product_id)
-);
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(LOWER(email));
-CREATE INDEX IF NOT EXISTS idx_orders_user_status ON orders(user_id, status);
-CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
-CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON order_items(product_id);
-CREATE OR REPLACE FUNCTION set_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-DROP TRIGGER IF EXISTS users_set_updated_at ON users;
-CREATE TRIGGER users_set_updated_at
-BEFORE UPDATE ON users
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
-DROP TRIGGER IF EXISTS products_set_updated_at ON products;
-CREATE TRIGGER products_set_updated_at
-BEFORE UPDATE ON products
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
-DROP TRIGGER IF EXISTS orders_set_updated_at ON orders;
-CREATE TRIGGER orders_set_updated_at
-BEFORE UPDATE ON orders
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
-DROP TRIGGER IF EXISTS order_items_set_updated_at ON order_items;
-CREATE TRIGGER order_items_set_updated_at
-BEFORE UPDATE ON order_items
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
-````
-
 ## File: src/app/api/cart/add/route.ts
 ````typescript
 export const runtime = "nodejs";
@@ -2679,80 +2377,272 @@ export default function MyCartClient() {
 }
 ````
 
-## File: src/components/shop/ProductActions.tsx
+## File: src/lib/mappers/product.mapper.ts
 ````typescript
-"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useCartStore } from "@/store/useCartStore";
-import { useUiStore } from "@/store/useUiStore";
-interface ProductActionsProps {
-  productId: string;
-  compact?: boolean;
+import type { Product } from "@prisma/client";
+import type { ProductDto } from "@/types/product";
+import { formatPrice, toNumber } from "@/lib/utils/numbers";
+export function toProductDto(product: Product): ProductDto {
+  return {
+    id: product.id,
+    product_name: product.productName,
+    product_packsize: product.productPacksize,
+    product_description: product.productDescription,
+    product_category: product.productCategory,
+    price: formatPrice(product.price),
+    Stock: product.stock,
+    image: product.image,
+    Badge: product.badge ?? undefined,
+    Tag: product.tag ?? "",
+    isActive: true,
+  };
 }
-export default function ProductActions({ productId, compact = false }: ProductActionsProps) {
-  const router = useRouter();
-  const { status } = useSession();
-  const addToCart = useCartStore((state) => state.addToCart);
-  const isLoading = useCartStore((state) => state.isLoading);
-  const toggleCart = useUiStore((state) => state.toggleCart);
-  const [message, setMessage] = useState<string | null>(null);
-  const redirectToLogin = (callbackUrl: string) => {
-    alert("Please login first to continue.");
-    router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
-  };
-  const handleAddToCart = async () => {
-    setMessage(null);
-    if (status !== "authenticated") {
-      redirectToLogin("/shop");
-      return;
-    }
-    try {
-      await addToCart(productId, 1);
-      setMessage("Added to cart");
-      toggleCart();
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unable to add product.");
-    }
-  };
-  const handleBuyNow = async () => {
-    setMessage(null);
-    if (status !== "authenticated") {
-      redirectToLogin(`/my-cart?buyNow=${productId}`);
-      return;
-    }
-    try {
-      await addToCart(productId, 1);
-      router.push("/my-cart");
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Unable to continue.");
-    }
-  };
-  return (
-    <div className={compact ? "mt-[16px]" : "mt-[24px]"}>
-      <div className={compact ? "flex flex-col gap-[10px]" : "flex flex-wrap gap-[12px]"}>
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          disabled={isLoading || status === "loading"}
-          className="flex-1 rounded-[12px] bg-[#f3f4f6] px-[18px] py-[12px] font-Poppins text-[14px] font-medium text-[#1f2937] transition-all duration-200 hover:bg-[#e5e7eb] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isLoading ? "Adding..." : "Add to Cart"}
-        </button>
-        <button
-          type="button"
-          onClick={handleBuyNow}
-          disabled={isLoading || status === "loading"}
-          className="flex-1 rounded-[12px] bg-[#4f46e5] px-[18px] py-[12px] font-Poppins text-[14px] font-semibold text-white transition-all duration-200 hover:bg-[#4338ca] disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          Buy Now
-        </button>
-      </div>
-      {message ? <p className="mt-2 text-center text-[12px] text-[#0f766e]">{message}</p> : null}
-    </div>
-  );
+export function toProductDtoList(products: Product[]): ProductDto[] {
+  return products.map(toProductDto);
 }
+export function getLineTotal(quantity: number, price: Product["price"]): number {
+  return toNumber(price) * quantity;
+}
+````
+
+## File: src/lib/services/product.service.ts
+````typescript
+import { toProductDto, toProductDtoList } from "@/lib/mappers/product.mapper";
+import { prisma } from "@/lib/prisma";
+import type { ProductDto } from "@/types/product";
+export async function getAllProducts(): Promise<ProductDto[]> {
+ const products = await prisma.product.findMany({
+  where: { isActive: true },
+  orderBy: { createdAt: "desc"},
+});
+  return toProductDtoList(products);
+}
+export async function getProductById(productId: string): Promise<ProductDto | null> {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+  return product ? toProductDto(product) : null;
+}
+export const productService = {
+  getAllProducts,
+  getProductById,
+};
+export default productService;
+````
+
+## File: src/lib/utils/numbers.ts
+````typescript
+export function toNumber(value: unknown): number {
+  if (value == null) return 0;
+  if (typeof value === "object") {
+    const v = value as any;
+    if (typeof v.toNumber === "function") return Number(v.toNumber());
+    if (typeof v.toString === "function") return Number(v.toString());
+  }
+  return Number(value as string | number);
+}
+export function roundCurrency(value: number): number {
+  return Number(value.toFixed(2));
+}
+export function formatPrice(value: unknown): string {
+  return `Rs ${toNumber(value)}`;
+}
+export function clampQuantity(quantity: number, minimum = 1): number {
+  return Math.max(minimum, Number(quantity || minimum));
+}
+export function parseRequestString(value: unknown, fallback = ""): string {
+  return String(value ?? fallback);
+}
+export function parseRequestNumber(value: unknown, fallback = 0): number {
+  return Number(value ?? fallback);
+}
+````
+
+## File: src/types/product.ts
+````typescript
+export interface ProductDto {
+  id: string;
+  product_name: string;
+  product_description: string;
+  product_category: string;
+  price: string;
+  Stock: number;
+  image: string;
+  Badge?: string;
+  Tag: string;
+  isActive: boolean;
+  product_packsize: number;
+}
+export interface ProductsListResponse {
+  success: boolean;
+  products: ProductDto[];
+  product?: ProductDto | null;
+}
+export interface ProductDetailResponse {
+  success: boolean;
+  product: ProductDto | null;
+  products: ProductDto[];
+}
+````
+
+## File: prisma/schema.prisma
+````prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum OrderStatus {
+  paid
+  pending
+  failed
+}
+
+model User {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(150)
+  email       String   @unique @db.VarChar(255)
+  password    String
+  phoneNumber String?  @map("phone_number") @db.VarChar(50)
+  address     String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  orders      Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id                  String      @id
+  productName         String      @map("product_name") @db.VarChar(255)
+  productDescription  String      @map("product_description")
+  productCategory     String      @map("product_category") @db.VarChar(150)
+  price               Decimal     @db.Decimal(10, 2)
+  stock               Int         @default(0)
+  image               String
+  badge               String?     @db.VarChar(80)
+  tag                 String?     @db.VarChar(100)
+  createdAt           DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  orderItems          OrderItem[]
+  isActive           Boolean  @default(true) @map("is_active")
+  productPacksize    Int      @default(12) @map("product_packsize")
+
+  @@map("products")
+}
+
+model Order {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String      @map("user_id") @db.Uuid
+  total     Decimal     @default(0) @db.Decimal(10, 2)
+  status    OrderStatus @default(pending)
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     OrderItem[]
+
+  @@index([userId, status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderId   String   @map("order_id") @db.Uuid
+  productId String   @map("product_id")
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([orderId, productId])
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+````
+
+## File: sql/01_schema.sql
+````sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  phone_number VARCHAR(50),
+  address TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS products (
+  id VARCHAR(255) PRIMARY KEY,
+  product_name VARCHAR(255) NOT NULL,
+  product_description TEXT NOT NULL,
+  product_category VARCHAR(150) NOT NULL,
+  product_packsize INTEGER NOT NULL DEFAULT 1 CHECK (product_packsize > 0),
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+  stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
+  image TEXT NOT NULL,
+  badge VARCHAR(80),
+  tag VARCHAR(100),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  total NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (total >= 0),
+  status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('paid', 'pending', 'failed')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS order_items (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  product_id VARCHAR(255) NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(order_id, product_id)
+);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(LOWER(email));
+CREATE INDEX IF NOT EXISTS idx_orders_user_status ON orders(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
+CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON order_items(product_id);
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+DROP TRIGGER IF EXISTS users_set_updated_at ON users;
+CREATE TRIGGER users_set_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+DROP TRIGGER IF EXISTS products_set_updated_at ON products;
+CREATE TRIGGER products_set_updated_at
+BEFORE UPDATE ON products
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+DROP TRIGGER IF EXISTS orders_set_updated_at ON orders;
+CREATE TRIGGER orders_set_updated_at
+BEFORE UPDATE ON orders
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
+DROP TRIGGER IF EXISTS order_items_set_updated_at ON order_items;
+CREATE TRIGGER order_items_set_updated_at
+BEFORE UPDATE ON order_items
+FOR EACH ROW
+EXECUTE FUNCTION set_updated_at();
 ````
 
 ## File: src/app/(auth)/login/page.tsx
@@ -2894,224 +2784,6 @@ export default function CheckoutPage() {
 }
 ````
 
-## File: src/app/wellness-journal/healthy-lifestyle/page.tsx
-````typescript
-"use client";
-import Link from "next/link";
-const lifestylePillars = [
-  {
-    title: "Restorative Sleep Architecture",
-    category: "Recovery",
-    color: "bg-indigo-50/80 border-indigo-100 text-indigo-700",
-    iconColor: "text-indigo-500",
-    desc: "Optimize your circadian rhythm through temperature regulation, light exposure management, and consistent wind-down protocols.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-      </svg>
-    )
-  },
-  {
-    title: "Mindful Kinetic Movement",
-    category: "Vitality",
-    color: "bg-rose-50/80 border-rose-100 text-rose-700",
-    iconColor: "text-rose-500",
-    desc: "Shift from punitive exercise to joyful movement. Focus on mobility, functional strength, and daily non-exercise activity thermogenesis (NEAT).",
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-      </svg>
-    )
-  },
-  {
-    title: "Nutrient-Dense Fueling",
-    category: "Nourishment",
-    color: "bg-emerald-50/80 border-emerald-100 text-emerald-700",
-    iconColor: "text-emerald-500",
-    desc: "Prioritize whole, unprocessed foods rich in micronutrients, fiber, and healthy fats to sustain stable energy and robust gut microbiome diversity.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    )
-  },
-  {
-    title: "Cognitive & Stress Resilience",
-    category: "Mindset",
-    color: "bg-amber-50/80 border-amber-100 text-amber-700",
-    iconColor: "text-amber-500",
-    desc: "Implement daily nervous system regulation practices like breathwork, meditation, and digital detoxing to maintain mental clarity.",
-    icon: (
-      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-      </svg>
-    )
-  }
-];
-const featuredArticles = [
-  {
-    title: "The 20-Minute Morning Protocol for Sustained Energy",
-    excerpt: "Why delaying caffeine intake by 90 minutes and prioritizing sunlight exposure can completely transform your afternoon productivity.",
-    readTime: "5 min read",
-    tag: "Habit Stacking"
-  },
-  {
-    title: "Decoding Food Labels: A Practical Guide to Clean Eating",
-    excerpt: "Learn to identify hidden sugars, inflammatory seed oils, and artificial additives masquerading as 'healthy' alternatives in the grocery aisle.",
-    readTime: "7 min read",
-    tag: "Nutrition"
-  },
-  {
-    title: "The Science of Cold Exposure and Metabolic Adaptation",
-    excerpt: "How brief, controlled cold therapy stimulates brown fat activation, reduces systemic inflammation, and enhances dopamine baseline levels.",
-    readTime: "6 min read",
-    tag: "Biohacking"
-  }
-];
-export default function HealthyLifestylePage() {
-  return (
-    <main className="min-h-screen bg-[#f8f9fa] py-12 font-Poppins text-[#2b2b2d]">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        {}
-        <nav className="mb-8 flex items-center text-[13px] font-medium text-[#686e7d]">
-          <Link href="/" className="hover:text-[#0f766e] transition-colors duration-200">Home</Link>
-          <span className="mx-2 text-[#cbd5e1]">/</span>
-          <Link href="/wellness-journal" className="hover:text-[#0f766e] transition-colors duration-200">Wellness Journal</Link>
-          <span className="mx-2 text-[#cbd5e1]">/</span>
-          <span className="text-[#0f766e]">Healthy Lifestyle</span>
-        </nav>
-        {}
-        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0f766e] via-[#5a6fc9] to-[#4a5cb8] p-8 md:p-16 text-white shadow-[0_20px_40px_-10px_rgba(108,127,216,0.3)] mb-14">
-          <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-          <div className="absolute -left-10 bottom-0 h-60 w-60 rounded-full bg-[#2b2b2d]/10 blur-3xl" aria-hidden="true" />
-          <div className="relative z-10 max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md border border-white/10">
-              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-              Holistic Wellness
-            </span>
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl leading-[1.1]">
-              Cultivating a Sustainable <br className="hidden md:block" />
-              <span className="text-white/90">Healthy Lifestyle</span>
-            </h1>
-            <p className="mt-5 text-[16px] leading-[28px] text-white/85 max-w-2xl">
-              True health is not a destination, but a dynamic equilibrium. Explore evidence-based strategies to harmonize your physical, mental, and metabolic well-being for the long term.
-            </p>
-          </div>
-        </section>
-        {}
-        <div className="mb-16">
-          <div className="mb-8 flex items-center gap-3">
-            <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
-            <h2 className="text-[22px] font-bold text-[#2b2b2d]">The Four Pillars of Vitality</h2>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {lifestylePillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                className="group relative flex flex-col justify-between rounded-[24px] border border-[#eef0f4] bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_rgba(43,43,45,0.08)] hover:border-[#0f766e]/30"
-              >
-                <div>
-                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wide rounded-lg border mb-5 ${pillar.color}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${pillar.iconColor.replace('text', 'bg')}`} />
-                    {pillar.category}
-                  </div>
-                  <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8f9fa] ${pillar.iconColor} transition-colors duration-300 group-hover:bg-[#0f766e] group-hover:text-white`}>
-                    {pillar.icon}
-                  </div>
-                  <h3 className="text-[18px] font-bold leading-[24px] text-[#2b2b2d] mb-3 transition-colors duration-300 group-hover:text-[#0f766e]">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-[14px] leading-[24px] text-[#686e7d]">
-                    {pillar.desc}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-        {}
-        <div className="mb-16">
-          <div className="mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
-              <h2 className="text-[22px] font-bold text-[#2b2b2d]">Latest Editorial Insights</h2>
-            </div>
-            <Link href="/wellness-journal" className="hidden md:inline-flex items-center gap-1 text-[14px] font-semibold text-[#0f766e] hover:text-[#5a6fc9] transition-colors">
-              View all articles
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </Link>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {featuredArticles.map((article, idx) => (
-              <Link
-                href={`/wellness-journal/article-${idx + 1}`}
-                key={article.title}
-                className="group flex flex-col rounded-[24px] border border-[#eef0f4] bg-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(43,43,45,0.08)]"
-              >
-                {}
-                <div className="h-40 w-full bg-gradient-to-br from-[#f3f1ff] to-[#eef0f4] relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition-opacity duration-500">
-                    <svg className="w-24 h-24 text-[#0f766e]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
-                  </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-block rounded-full bg-white/80 backdrop-blur-sm px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0f766e] border border-[#0f766e]/20">
-                      {article.tag}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col flex-grow p-6">
-                  <h3 className="text-[18px] font-bold leading-[26px] text-[#2b2b2d] mb-3 transition-colors duration-300 group-hover:text-[#0f766e]">
-                    {article.title}
-                  </h3>
-                  <p className="text-[14px] leading-[24px] text-[#686e7d] mb-4 flex-grow">
-                    {article.excerpt}
-                  </p>
-                  <div className="flex items-center gap-2 text-[12px] font-medium text-[#94a3b8] pt-4 border-t border-[#f1f3f5]">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    {article.readTime}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-6 text-center md:hidden">
-            <Link href="/wellness-journal" className="inline-flex items-center gap-1 text-[14px] font-semibold text-[#0f766e] hover:text-[#5a6fc9] transition-colors">
-              View all articles
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </Link>
-          </div>
-        </div>
-        {}
-        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#f3f1ff] via-white to-[#f8f9fa] border border-[#0f766e]/10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#0f766e]/5 blur-3xl" />
-          <div className="relative z-10 max-w-xl">
-            <h3 className="text-[22px] font-bold text-[#2b2b2d] flex items-center gap-3">
-              <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              Join the 2good PlusWellness Community
-            </h3>
-            <p className="text-[15px] leading-[26px] text-[#686e7d] mt-3">
-              Receive weekly, science-backed insights on nutrition, movement, and mindset directly to your inbox. No spam, just actionable strategies for a better you.
-            </p>
-          </div>
-          <div className="relative z-10 flex w-full md:w-auto gap-3">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="h-12 w-full md:w-72 rounded-xl border border-[#e2e8f0] bg-white px-4 text-[14px] text-[#2b2b2d] outline-none transition-all duration-200 placeholder:text-[#94a3b8] focus:border-[#0f766e] focus:ring-4 focus:ring-[#0f766e]/10"
-            />
-            <button className="h-12 whitespace-nowrap inline-flex items-center justify-center rounded-xl bg-[#0f766e] px-6 text-[14px] font-semibold text-white shadow-lg shadow-[#0f766e]/20 transition-all duration-300 hover:bg-[#2b2b2d] hover:shadow-xl hover:-translate-y-0.5">
-              Subscribe
-            </button>
-          </div>
-        </section>
-      </div>
-    </main>
-  );
-}
-````
-
 ## File: src/app/wellness-journal/herbal-benefits/page.tsx
 ````typescript
 "use client";
@@ -3236,135 +2908,6 @@ export default function HerbalBenefitsPage() {
 }
 ````
 
-## File: src/app/wellness-journal/hydration-tips/page.tsx
-````typescript
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-export default function HydrationTipsPage() {
-  const [calculatorWeight, setCalculatorWeight] = useState("");
-  const [calculatedOz, setCalculatedOz] = useState<number | null>(null);
-  const handleCalculate = (e: React.FormEvent) => {
-    e.preventDefault();
-    const weightNum = parseFloat(calculatorWeight);
-    if (!isNaN(weightNum) && weightNum > 0) {
-      setCalculatedOz(Math.round(weightNum * 0.5));
-    }
-  };
-  return (
-    <main className="min-h-screen bg-[#f8f9fa] py-12 font-Poppins text-[#2b2b2d]">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        {}
-        <nav className="mb-8 flex items-center text-[13px] font-medium text-[#686e7d]">
-          <Link href="/" className="hover:text-[#0f766e] transition-colors duration-200">Home</Link>
-          <span className="mx-2 text-[#cbd5e1]">/</span>
-          <Link href="/wellness-journal" className="hover:text-[#0f766e] transition-colors duration-200">Wellness Journal</Link>
-          <span className="mx-2 text-[#cbd5e1]">/</span>
-          <span className="text-[#0f766e]">Hydration Tips</span>
-        </nav>
-        {}
-        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0f766e] via-[#5a6fc9] to-[#4a5cb8] p-8 md:p-16 text-white shadow-[0_20px_40px_-10px_rgba(108,127,216,0.3)] mb-12">
-          <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-          <div className="absolute -left-10 bottom-0 h-60 w-60 rounded-full bg-[#2b2b2d]/10 blur-3xl" aria-hidden="true" />
-          <div className="relative z-10 max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md border border-white/10">
-              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-              Optimal Living
-            </span>
-            <h1 className="mt-5 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl leading-[1.1]">
-              The Art of Hydration
-            </h1>
-            <p className="mt-5 text-[16px] leading-[28px] text-white/85 max-w-xl">
-              Water isn't just a basic need—it is the foundational fuel for cellular performance, mental clarity, and metabolic function. Discover your ideal daily rhythm.
-            </p>
-          </div>
-        </section>
-        <div className="grid gap-10 lg:grid-cols-3">
-          {}
-          <div className="lg:col-span-2 space-y-8">
-            {}
-            <div className="rounded-[24px] border border-[#eef0f4] bg-white p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-              <h2 className="text-[22px] font-bold text-[#2b2b2d] mb-8 flex items-center gap-3">
-                <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
-                Strategic Daily Hydration Rules
-              </h2>
-              <div className="space-y-8">
-                {[
-                  {
-                    num: "01",
-                    title: "The Golden Morning Glass",
-                    desc: "Drink 16oz of ambient water immediately upon waking. Sleep naturally dehydrates your system; jumpstart your digestion and wake up your internal organs before adding coffee or food.",
-                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                  },
-                  {
-                    num: "02",
-                    title: "Interval Sipping Over Gulping",
-                    desc: "Your body absorbs fluid best when consumed steadily in small increments. Chugging large volumes overrides renal capacity, sending water straight out of your system without structural absorption.",
-                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  },
-                  {
-                    num: "03",
-                    title: "Pre-empt Hunger Triggers",
-                    desc: "Mild dehydration frequently mimics food cravings in the brain. Drink a glass of water 20 minutes before regular meal slots to ground genuine nutritional signals.",
-                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                  }
-                ].map((item) => (
-                  <div key={item.num} className="group flex gap-5 items-start">
-                    <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f766e]/5 text-[#0f766e] transition-colors duration-300 group-hover:bg-[#0f766e] group-hover:text-white">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-[18px] font-bold text-[#2b2b2d] mb-1">{item.title}</h3>
-                      <p className="text-[15px] leading-[26px] text-[#686e7d]">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {}
-            <div className="rounded-[24px] border-l-4 border-[#f59e0b] bg-[#fffbeb]/50 p-6 md:p-8 shadow-sm backdrop-blur-sm">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1">
-                  <svg className="w-6 h-6 text-[#f59e0b]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                </div>
-                <div>
-                  <h3 className="text-[18px] font-bold text-[#2b2b2d] mb-2">Recognizing Silent Dehydration Flags</h3>
-                  <p className="text-[15px] leading-[26px] text-[#686e7d]">
-                    If you are already experiencing a dry mouth or mild fatigue, your tissues are running on low reserves. Watch out for brain fog, random headaches, and reduced muscle elasticity during simple physical movements.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {}
-          <div className="space-y-8">
-            {}
-            {
-}
-            {}
-            <div className="relative overflow-hidden rounded-[24px] bg-[#2b2b2d] p-8 text-center text-white shadow-xl">
-              <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-[#0f766e]/20 blur-3xl" />
-              <div className="relative z-10">
-                <h4 className="text-[20px] font-bold mb-3">Looking for More Flavor?</h4>
-                <p className="text-[14px] text-white/70 leading-[24px] mb-6">
-                  Infuse your routine with trace minerals and botanicals using our curated 2good Plus Wellness Water blends.
-                </p>
-                <Link
-                  href="/shop"
-                  className="inline-flex h-11 items-center justify-center rounded-xl bg-[#0f766e] px-6 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-white hover:text-[#2b2b2d] hover:shadow-lg"
-                >
-                  Explore Infusions
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-}
-````
-
 ## File: src/components/common/CartSidebar.tsx
 ````typescript
 "use client";
@@ -3483,6 +3026,89 @@ export default function CartSidebar() {
         </div>
       </div>
     </>
+  );
+}
+````
+
+## File: src/components/shop/ProductActions.tsx
+````typescript
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useCartStore } from "@/store/useCartStore";
+import { useUiStore } from "@/store/useUiStore";
+interface ProductActionsProps {
+  productId: string;
+  compact?: boolean;
+}
+export default function ProductActions({
+  productId,
+  compact = false,
+}: ProductActionsProps) {
+  const router = useRouter();
+  const { status } = useSession();
+  const addToCart = useCartStore((state) => state.addToCart);
+  const isLoading = useCartStore((state) => state.isLoading);
+  const toggleCart = useUiStore((state) => state.toggleCart);
+  const [message, setMessage] = useState<string | null>(null);
+  const redirectToLogin = (callbackUrl: string) => {
+    alert("Please login first to continue.");
+    router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+  };
+  const handleAddToCart = async () => {
+    setMessage(null);
+    if (status !== "authenticated") {
+      redirectToLogin("/shop");
+      return;
+    }
+    try {
+      await addToCart(productId, 1);
+      setMessage("Added to cart");
+      toggleCart();
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Unable to add product.",
+      );
+    }
+  };
+  const handleBuyNow = async () => {
+    setMessage(null);
+    if (status !== "authenticated") {
+      redirectToLogin(`/my-cart?buyNow=${productId}`);
+      return;
+    }
+    try {
+      await addToCart(productId, 1);
+      router.push("/my-cart");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Unable to continue.",
+      );
+    }
+  };
+  return (
+    <div className={compact ? "mt-[16px]" : "mt-[24px]"}>
+      <div
+        className={
+          compact ? "flex flex-col gap-[10px]" : "flex flex-wrap gap-[12px]"
+        }
+      >
+        {
+}
+        <button
+          type="button"
+          onClick={() => router.push(`/contact-us`)}
+          disabled={isLoading || status === "loading"}
+          className="flex-1 rounded-[12px] bg-teal-600  px-[18px] py-[12px] font-Poppins text-[14px] font-semibold text-white transition-all duration-200 hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Buy Now
+        </button>
+      </div>
+      {message ? (
+        <p className="mt-2 text-center text-[12px] text-[#0f766e]">{message}</p>
+      ) : null}
+    </div>
   );
 }
 ````
@@ -3870,150 +3496,349 @@ export default function RegisterPage() {
 }
 ````
 
-## File: src/components/common/AboutSection.tsx
+## File: src/app/wellness-journal/healthy-lifestyle/page.tsx
 ````typescript
 "use client";
 import Link from "next/link";
-import { aboutContent } from "@/lib/site-content";
-type AboutSectionProps = {
-  variant?: "home" | "page";
-};
-export default function AboutSection({ variant = "page" }: AboutSectionProps) {
-  const isHome = variant === "home";
+const lifestylePillars = [
+  {
+    title: "Restorative Sleep Architecture",
+    category: "Recovery",
+    color: "bg-indigo-50/80 border-indigo-100 text-indigo-700",
+    iconColor: "text-indigo-500",
+    desc: "Optimize your circadian rhythm through temperature regulation, light exposure management, and consistent wind-down protocols.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    )
+  },
+  {
+    title: "Mindful Kinetic Movement",
+    category: "Vitality",
+    color: "bg-rose-50/80 border-rose-100 text-rose-700",
+    iconColor: "text-rose-500",
+    desc: "Shift from punitive exercise to joyful movement. Focus on mobility, functional strength, and daily non-exercise activity thermogenesis (NEAT).",
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    )
+  },
+  {
+    title: "Nutrient-Dense Fueling",
+    category: "Nourishment",
+    color: "bg-emerald-50/80 border-emerald-100 text-emerald-700",
+    iconColor: "text-emerald-500",
+    desc: "Prioritize whole, unprocessed foods rich in micronutrients, fiber, and healthy fats to sustain stable energy and robust gut microbiome diversity.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    )
+  },
+  {
+    title: "Cognitive & Stress Resilience",
+    category: "Mindset",
+    color: "bg-amber-50/80 border-amber-100 text-amber-700",
+    iconColor: "text-amber-500",
+    desc: "Implement daily nervous system regulation practices like breathwork, meditation, and digital detoxing to maintain mental clarity.",
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+    )
+  }
+];
+const featuredArticles = [
+  {
+    title: "The 20-Minute Morning Protocol for Sustained Energy",
+    excerpt: "Why delaying caffeine intake by 90 minutes and prioritizing sunlight exposure can completely transform your afternoon productivity.",
+    readTime: "5 min read",
+    tag: "Habit Stacking"
+  },
+  {
+    title: "Decoding Food Labels: A Practical Guide to Clean Eating",
+    excerpt: "Learn to identify hidden sugars, inflammatory seed oils, and artificial additives masquerading as 'healthy' alternatives in the grocery aisle.",
+    readTime: "7 min read",
+    tag: "Nutrition"
+  },
+  {
+    title: "The Science of Cold Exposure and Metabolic Adaptation",
+    excerpt: "How brief, controlled cold therapy stimulates brown fat activation, reduces systemic inflammation, and enhances dopamine baseline levels.",
+    readTime: "6 min read",
+    tag: "Biohacking"
+  }
+];
+export default function HealthyLifestylePage() {
   return (
-    <section className={isHome ? "mx-auto max-w-7xl px-4 py-16 md:px-6" : ""}>
-      <div className="rounded-[32px] bg-white p-8 shadow-sm md:p-12 lg:p-16">
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-          <div>
-            <p className="mb-4 text-xl font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
-              {aboutContent.eyebrow}
+    <main className="min-h-screen bg-[#f8f9fa] py-12 font-Poppins text-[#2b2b2d]">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        {}
+        <nav className="mb-8 flex items-center text-[13px] font-medium text-[#686e7d]">
+          <Link href="/" className="hover:text-[#0f766e] transition-colors duration-200">Home</Link>
+          <span className="mx-2 text-[#cbd5e1]">/</span>
+          <Link href="/wellness-journal" className="hover:text-[#0f766e] transition-colors duration-200">Wellness Journal</Link>
+          <span className="mx-2 text-[#cbd5e1]">/</span>
+          <span className="text-[#0f766e]">Healthy Lifestyle</span>
+        </nav>
+        {}
+        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0f766e] via-[#5a6fc9] to-[#4a5cb8] p-8 md:p-16 text-white shadow-[0_20px_40px_-10px_rgba(108,127,216,0.3)] mb-14">
+          <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+          <div className="absolute -left-10 bottom-0 h-60 w-60 rounded-full bg-[#2b2b2d]/10 blur-3xl" aria-hidden="true" />
+          <div className="relative z-10 max-w-3xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md border border-white/10">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              Holistic Wellness
+            </span>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl leading-[1.1]">
+              Cultivating a Sustainable <br className="hidden md:block" />
+              <span className="text-white/90">Healthy Lifestyle</span>
+            </h1>
+            <p className="mt-5 text-[16px] leading-[28px] text-white/85 max-w-2xl">
+              True health is not a destination, but a dynamic equilibrium. Explore evidence-based strategies to harmonize your physical, mental, and metabolic well-being for the long term.
             </p>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-              {isHome ? aboutContent.homeTitle : aboutContent.heroTitle}
-            </h2>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              {isHome ? aboutContent.homeDescription : aboutContent.heroDescription}
-            </p>
-            {!isHome ? (
-              <div className="mt-8 space-y-5 text-sm leading-7 text-slate-600 md:text-base md:leading-8">
-                {aboutContent.storyParagraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-            ) : null}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/about-us"
-                className="rounded-full bg-[#0f766e] px-6 py-3 text-sm font-semibold !text-white transition hover:-translate-y-1 hover:bg-[#0c5a52] hover:text-white"
-              >
-                Order Water
-              </Link>
-              <Link
-                href="/contact-us"
-                className="rounded-full border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#0f766e] hover:text-[#0f766e]"
-              >
-                Contact Us
-              </Link>
-            </div>
           </div>
-          <div className="rounded-[28px] bg-[#f8fafc] p-8">
-            <h3 className="text-2xl font-semibold text-slate-900">
-              What makes us reliable?
-            </h3>
-            <ul className="mt-6 space-y-5 text-slate-600">
-              {aboutContent.highlights.map((highlight) => (
-                <li key={highlight} className="flex gap-3">
-                  <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
-                    ✓
-                  </span>
-                  <span>{highlight}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 rounded-[24px] bg-white p-6 shadow-sm">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#0f766e]">
-                Our promise
-              </p>
-              <p className="mt-3 text-sm leading-7 text-slate-600">
-                Tested, trusted, and delivered fresh — every bottle is handled
-                with the care your family deserves.
-              </p>
-            </div>
+        </section>
+        {}
+        <div className="mb-16">
+          <div className="mb-8 flex items-center gap-3">
+            <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
+            <h2 className="text-[22px] font-bold text-[#2b2b2d]">The Four Pillars of Vitality</h2>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {lifestylePillars.map((pillar) => (
+              <article
+                key={pillar.title}
+                className="group relative flex flex-col justify-between rounded-[24px] border border-[#eef0f4] bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-10px_rgba(43,43,45,0.08)] hover:border-[#0f766e]/30"
+              >
+                <div>
+                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-bold tracking-wide rounded-lg border mb-5 ${pillar.color}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${pillar.iconColor.replace('text', 'bg')}`} />
+                    {pillar.category}
+                  </div>
+                  <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8f9fa] ${pillar.iconColor} transition-colors duration-300 group-hover:bg-[#0f766e] group-hover:text-white`}>
+                    {pillar.icon}
+                  </div>
+                  <h3 className="text-[18px] font-bold leading-[24px] text-[#2b2b2d] mb-3 transition-colors duration-300 group-hover:text-[#0f766e]">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-[14px] leading-[24px] text-[#686e7d]">
+                    {pillar.desc}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
+        {}
+        <div className="mb-16">
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
+              <h2 className="text-[22px] font-bold text-[#2b2b2d]">Latest Editorial Insights</h2>
+            </div>
+            <Link href="/wellness-journal" className="hidden md:inline-flex items-center gap-1 text-[14px] font-semibold text-[#0f766e] hover:text-[#5a6fc9] transition-colors">
+              View all articles
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </Link>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredArticles.map((article, idx) => (
+              <Link
+                href={`/wellness-journal/article-${idx + 1}`}
+                key={article.title}
+                className="group flex flex-col rounded-[24px] border border-[#eef0f4] bg-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(43,43,45,0.08)]"
+              >
+                {}
+                <div className="h-40 w-full bg-gradient-to-br from-[#f3f1ff] to-[#eef0f4] relative overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                    <svg className="w-24 h-24 text-[#0f766e]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
+                  </div>
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-block rounded-full bg-white/80 backdrop-blur-sm px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#0f766e] border border-[#0f766e]/20">
+                      {article.tag}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col flex-grow p-6">
+                  <h3 className="text-[18px] font-bold leading-[26px] text-[#2b2b2d] mb-3 transition-colors duration-300 group-hover:text-[#0f766e]">
+                    {article.title}
+                  </h3>
+                  <p className="text-[14px] leading-[24px] text-[#686e7d] mb-4 flex-grow">
+                    {article.excerpt}
+                  </p>
+                  <div className="flex items-center gap-2 text-[12px] font-medium text-[#94a3b8] pt-4 border-t border-[#f1f3f5]">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {article.readTime}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6 text-center md:hidden">
+            <Link href="/wellness-journal" className="inline-flex items-center gap-1 text-[14px] font-semibold text-[#0f766e] hover:text-[#5a6fc9] transition-colors">
+              View all articles
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </Link>
+          </div>
+        </div>
+        {}
+        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#f3f1ff] via-white to-[#f8f9fa] border border-[#0f766e]/10 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#0f766e]/5 blur-3xl" />
+          <div className="relative z-10 max-w-xl">
+            <h3 className="text-[22px] font-bold text-[#2b2b2d] flex items-center gap-3">
+              <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Join the 2good PlusWellness Community
+            </h3>
+            <p className="text-[15px] leading-[26px] text-[#686e7d] mt-3">
+              Receive weekly, science-backed insights on nutrition, movement, and mindset directly to your inbox. No spam, just actionable strategies for a better you.
+            </p>
+          </div>
+          <div className="relative z-10 flex w-full md:w-auto gap-3">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="h-12 w-full md:w-72 rounded-xl border border-[#e2e8f0] bg-white px-4 text-[14px] text-[#2b2b2d] outline-none transition-all duration-200 placeholder:text-[#94a3b8] focus:border-[#0f766e] focus:ring-4 focus:ring-[#0f766e]/10"
+            />
+            <button className="h-12 whitespace-nowrap inline-flex items-center justify-center rounded-xl bg-[#0f766e] px-6 text-[14px] font-semibold text-white shadow-lg shadow-[#0f766e]/20 transition-all duration-300 hover:bg-[#2b2b2d] hover:shadow-xl hover:-translate-y-0.5">
+              Subscribe
+            </button>
+          </div>
+        </section>
       </div>
-    </section>
+    </main>
   );
 }
 ````
 
-## File: src/components/shop/ProductCard.tsx
+## File: src/app/wellness-journal/hydration-tips/page.tsx
 ````typescript
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
-import type { Product } from "@/lib/products";
-import ProductActions from "@/components/shop/ProductActions";
-interface ProductCardProps {
-  product: Product;
-}
-export default function ProductCard({ product }: ProductCardProps) {
+export default function HydrationTipsPage() {
+  const [calculatorWeight, setCalculatorWeight] = useState("");
+  const [calculatedOz, setCalculatedOz] = useState<number | null>(null);
+  const handleCalculate = (e: React.FormEvent) => {
+    e.preventDefault();
+    const weightNum = parseFloat(calculatorWeight);
+    if (!isNaN(weightNum) && weightNum > 0) {
+      setCalculatedOz(Math.round(weightNum * 0.5));
+    }
+  };
   return (
-    <div className="bb-pro-box bg-[#fff] border border-[#eee] rounded-[20px] overflow-hidden transition-all duration-300 hover:shadow-md">
-      <div className="bb-pro-img relative overflow-hidden border-b border-[#eee]">
-        <Link href={`/shop/${product.id}`} className="block bg-[#f8f8fb]">
-          <img
-            src={product.image}
-            alt={product.product_name}
-            className="w-full h-[260px] object-contain p-[20px] transition-all duration-300 hover:scale-105"
-          />
-        </Link>
-        {product.Badge && (
-          <span className="absolute top-[15px] left-[15px] bg-[#0f766e] text-white text-[12px] font-Poppins px-[12px] py-[4px] rounded-[20px]">
-            {product.Badge}
-          </span>
-        )}
-      </div>
-      <div className="bb-pro-contact p-[20px]">
-        <div className="bb-pro-subtitle mb-[8px] flex items-center justify-between">
-          <span className="font-Poppins text-[13px] text-[#777]">
-            {product.product_category}
-          </span>
-          <span className="flex">
-            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
-            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
-            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
-            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
-            <i className="ri-star-line text-[15px] text-[#777]" />
-          </span>
-        </div>
-        <h4 className="bb-pro-title mb-[8px] text-[16px] leading-[18px]">
-          <Link
-            href={`/shop/${product.id}`}
-            className="font-quicksand block whitespace-nowrap overflow-hidden text-ellipsis text-[15px] leading-[18px] text-[#3d4750] font-semibold tracking-[0.03rem] hover:text-[#0f766e]"
-          >
-            {product.product_name}
-          </Link>
-        </h4>
-        <p className="font-Poppins text-[14px] text-[#686e7d] font-light leading-[24px] tracking-[0.03rem] mb-[14px] line-clamp-2">
-          {product.product_description}
-        </p>
-        <div className="bb-price flex items-center justify-between">
-          <div>
-            <span className="new-price text-[#686e7d] font-quicksand text-[16px] font-bold">
-              {product.price}
+    <main className="min-h-screen bg-[#f8f9fa] py-12 font-Poppins text-[#2b2b2d]">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        {}
+        <nav className="mb-8 flex items-center text-[13px] font-medium text-[#686e7d]">
+          <Link href="/" className="hover:text-[#0f766e] transition-colors duration-200">Home</Link>
+          <span className="mx-2 text-[#cbd5e1]">/</span>
+          <Link href="/wellness-journal" className="hover:text-[#0f766e] transition-colors duration-200">Wellness Journal</Link>
+          <span className="mx-2 text-[#cbd5e1]">/</span>
+          <span className="text-[#0f766e]">Hydration Tips</span>
+        </nav>
+        {}
+        <section className="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0f766e] via-[#5a6fc9] to-[#4a5cb8] p-8 md:p-16 text-white shadow-[0_20px_40px_-10px_rgba(108,127,216,0.3)] mb-12">
+          <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+          <div className="absolute -left-10 bottom-0 h-60 w-60 rounded-full bg-[#2b2b2d]/10 blur-3xl" aria-hidden="true" />
+          <div className="relative z-10 max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white/90 backdrop-blur-md border border-white/10">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              Optimal Living
             </span>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl leading-[1.1]">
+              The Art of Hydration
+            </h1>
+            <p className="mt-5 text-[16px] leading-[28px] text-white/85 max-w-xl">
+              Water isn't just a basic need—it is the foundational fuel for cellular performance, mental clarity, and metabolic function. Discover your ideal daily rhythm.
+            </p>
           </div>
-          <span className="font-Poppins text-[13px] text-[#777]">
-            Stock: {product.Stock}
-          </span>
+        </section>
+        <div className="grid gap-10 lg:grid-cols-3">
+          {}
+          <div className="lg:col-span-2 space-y-8">
+            {}
+            <div className="rounded-[24px] border border-[#eef0f4] bg-white p-6 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <h2 className="text-[22px] font-bold text-[#2b2b2d] mb-8 flex items-center gap-3">
+                <span className="h-8 w-1 rounded-full bg-[#0f766e]" />
+                Strategic Daily Hydration Rules
+              </h2>
+              <div className="space-y-8">
+                {[
+                  {
+                    num: "01",
+                    title: "The Golden Morning Glass",
+                    desc: "Drink 16oz of ambient water immediately upon waking. Sleep naturally dehydrates your system; jumpstart your digestion and wake up your internal organs before adding coffee or food.",
+                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                  },
+                  {
+                    num: "02",
+                    title: "Interval Sipping Over Gulping",
+                    desc: "Your body absorbs fluid best when consumed steadily in small increments. Chugging large volumes overrides renal capacity, sending water straight out of your system without structural absorption.",
+                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  },
+                  {
+                    num: "03",
+                    title: "Pre-empt Hunger Triggers",
+                    desc: "Mild dehydration frequently mimics food cravings in the brain. Drink a glass of water 20 minutes before regular meal slots to ground genuine nutritional signals.",
+                    icon: <svg className="w-6 h-6 text-[#0f766e]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                  }
+                ].map((item) => (
+                  <div key={item.num} className="group flex gap-5 items-start">
+                    <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0f766e]/5 text-[#0f766e] transition-colors duration-300 group-hover:bg-[#0f766e] group-hover:text-white">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-[18px] font-bold text-[#2b2b2d] mb-1">{item.title}</h3>
+                      <p className="text-[15px] leading-[26px] text-[#686e7d]">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {}
+            <div className="rounded-[24px] border-l-4 border-[#f59e0b] bg-[#fffbeb]/50 p-6 md:p-8 shadow-sm backdrop-blur-sm">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="w-6 h-6 text-[#f59e0b]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                </div>
+                <div>
+                  <h3 className="text-[18px] font-bold text-[#2b2b2d] mb-2">Recognizing Silent Dehydration Flags</h3>
+                  <p className="text-[15px] leading-[26px] text-[#686e7d]">
+                    If you are already experiencing a dry mouth or mild fatigue, your tissues are running on low reserves. Watch out for brain fog, random headaches, and reduced muscle elasticity during simple physical movements.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {}
+          <div className="space-y-8">
+            {}
+            {
+}
+            {}
+            <div className="relative overflow-hidden rounded-[24px] bg-[#2b2b2d] p-8 text-center text-white shadow-xl">
+              <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-[#0f766e]/20 blur-3xl" />
+              <div className="relative z-10">
+                <h4 className="text-[20px] font-bold mb-3">Looking for More Flavor?</h4>
+                <p className="text-[14px] text-white/70 leading-[24px] mb-6">
+                  Infuse your routine with trace minerals and botanicals using our curated 2good Plus Wellness Water blends.
+                </p>
+                <Link
+                  href="/shop"
+                  className="inline-flex h-11 items-center justify-center rounded-xl bg-[#0f766e] px-6 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-white hover:text-[#2b2b2d] hover:shadow-lg"
+                >
+                  Explore Infusions
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="mt-[14px]">
-          <span className="inline-block text-[12px] font-Poppins text-[#0f766e] bg-[#f1f3ff] px-[10px] py-[4px] rounded-full">
-            {product.Tag}
-          </span>
-        </div>
-        <ProductActions productId={product.id} compact />
       </div>
-    </div>
+    </main>
   );
 }
 ````
@@ -4028,246 +3853,6 @@ export {
   productCategories,
   productTags,
 } from "./products.data";
-````
-
-## File: src/lib/site-content.ts
-````typescript
-export const homeContent = {
-  hero: {
-    eyebrow: "2goodplus Packaged Drinking Water",
-    title: "Pure Water. Pure Life.",
-    highlightedWord: "Pure Life.",
-    description:
-      "Every drop of 2goodplus packaged drinking water is purified through a 7-stage filtration process, tested to BIS standards, and sealed fresh — so you can trust every sip your family takes, every single day.",
-    ctaLabel: "Order now →",
-    ctaHref: "/about-us",
-    secondaryCtaLabel: "Contact for bulk orders",
-    secondaryCtaHref: "/contact-us",
-    image: "/assets/img/hero/hero-b1.png",
-  },
-  trustStats: [
-    {
-      icon: "💧",
-      title: "7-Stage Filtration",
-      label: "Lab-tested purity",
-    },
-    {
-      icon: "🏠",
-      title: "10,000+ Happy Homes",
-      label: "Across the region",
-    },
-    {
-      icon: "✓",
-      title: "BIS Certified",
-      label: "Standard IS 14543",
-    },
-    {
-      icon: "🚚",
-      title: "Delivery within 24 hours",
-      label: "Order before 12 PM",
-    },
-  ],
-  whyChoose: {
-    eyebrow: "Why choose 2goodplus",
-    title: "Why families trust 2goodplus",
-    description:
-      "Clean, safe, and reliable packaged drinking water for homes, offices, and everyday hydration.",
-    cards: [
-      {
-        title: "Purity You Can Taste",
-        description:
-          "Our 7-stage reverse osmosis system removes 99.9% of impurities, bacteria, and heavy metals. What’s left? Only the minerals your body needs and the clean taste you deserve. No shortcuts, no compromises.",
-      },
-      {
-        title: "Safety Sealed at Source",
-        description:
-          "Each bottle is sealed at our state-of-the-art plant under ISO-controlled conditions. From fill to cap, no human hands touch your water. That’s the kind of safety standard we hold ourselves to every single day.",
-      },
-      {
-        title: "Delivered to Your Door",
-        description:
-          "Skip the supermarket queue. Order 500ml bottles, 1L packs, or 20L bulk jars online or by phone — and we’ll bring them straight to your home or office, on a schedule that works for you.",
-      },
-    ],
-  },
-};
-export const aboutContent = {
-  eyebrow: "About 2goodplus",
-  heroTitle: "We started with one simple belief — everyone deserves clean water.",
-  heroDescription:
-    "2goodplus was born from a family’s need for truly safe drinking water. Today, we supply thousands of homes and businesses with water that is tested, trusted, and delivered fresh every day.",
-  homeTitle: "Clean water, made simple for everyday life.",
-  homeDescription:
-    "2goodplus exists to make safe packaged drinking water easy to trust and easy to order. From purification to sealing and delivery, every step is handled with care so families and businesses can rely on fresh water every day.",
-  storyParagraphs: [
-    "At 2goodplus, we believe clean water should never feel like a luxury or a question mark. It should be something every family can depend on without worrying about purity, safety, or freshness. That belief became the starting point for our packaged drinking water brand.",
-    "We began with a simple goal: create drinking water that we would confidently serve in our own homes. To achieve that, our water goes through a careful 7-stage purification process designed to remove impurities, bacteria, heavy metals, and unwanted particles while keeping the taste clean and refreshing.",
-    "Every bottle is processed and sealed under controlled conditions, reducing unnecessary handling and helping maintain consistent quality from the plant to your doorstep. Our process is built around trust, because when customers choose drinking water for their family, office, shop, or event, trust matters more than anything else.",
-    "Today, 2goodplus serves homes and businesses with packaged drinking water options for daily use, office hydration, travel, events, and bulk requirements. Whether you need small bottles, 1L packs, or 20L jars, our team focuses on dependable service and timely delivery.",
-    "We are here to make hydration simple: pure water, clear communication, responsible handling, and delivery that fits your routine.",
-  ],
-  highlights: [
-    "7-stage purification process",
-    "BIS standard-focused quality checks",
-    "Freshly sealed packaged drinking water",
-    "Home, office, and bulk delivery support",
-  ],
-};
-export const contactContent = {
-  eyebrow: "Contact us",
-  title: "Get in touch — we’re happy to help",
-  description:
-    "Got a question about an order? Need bulk pricing for your office? Or just want to know more about how we make our water? We’re just a message away. Our team responds within a few hours on business days.",
-  panelTitle: "Contact details",
-  phone: "+91-9967399880",
-  whatsapp: "+91-9967399880",
-  email: "Corporate@gmhospitality.in",
-  address:
-    "Plot No. 24, DIC Industrial Sate Raniya, Kanpur Dehat- 209 304, Uttar Pradesh",
-  businessHours: "Monday – Saturday, 8:00 AM – 8:00 PM",
-  mapQuery:
-    "Plot No. 24, DIC Industrial Sate Raniya, Kanpur Dehat 209304 Uttar Pradesh",
-};
-````
-
-## File: src/styles/globals.css
-````css
-@import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-:root {
-  color-scheme: light;
-  background: #f8f8fb;
-  color: #0f172a;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-* {
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  margin: 0;
-  min-height: 100vh;
-  width: 100%;
-  background: #f8f8fb;
-  color: #0f172a;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  overflow-x: hidden;
-}
-html,
-body,
-main,
-section {
-  width: 100%;
-}
-main {
-  overflow-x: clip;
-}
-a {
-  color: inherit;
-  text-decoration: none;
-}
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-.sidebar-transition {
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-.water-ripple {
-  position: relative;
-  overflow: hidden;
-}
-.water-ripple::after {
-  content: "";
-  position: absolute;
-  inset: 50%;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(15, 118, 110, 0.35);
-  border-radius: 999px;
-  transform: translate(-50%, -50%) scale(0);
-  animation: ripplePulse 2.8s infinite;
-}
-@keyframes ripplePulse {
-  0% {
-    opacity: 0.7;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(9);
-  }
-}
-.water-wave-divider {
-  line-height: 0;
-  overflow: hidden;
-  background: transparent;
-}
-.water-wave-divider svg {
-  display: block;
-  width: 100%;
-  height: 0px;
-}
-.droplet-layer {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.droplet {
-  position: absolute;
-  top: -20px;
-  width: 9px;
-  height: 13px;
-  border-radius: 999px 999px 999px 0;
-  background: rgba(15, 118, 110, 0.16);
-  transform: rotate(-45deg);
-  animation: dropletFall 7s linear infinite;
-}
-.droplet:nth-child(1) {
-  left: 12%;
-  animation-delay: 0s;
-}
-.droplet:nth-child(2) {
-  left: 34%;
-  animation-delay: 1.4s;
-}
-.droplet:nth-child(3) {
-  left: 58%;
-  animation-delay: 2.8s;
-}
-.droplet:nth-child(4) {
-  left: 76%;
-  animation-delay: 4.2s;
-}
-.droplet:nth-child(5) {
-  left: 90%;
-  animation-delay: 5.6s;
-}
-@keyframes dropletFall {
-  0% {
-    opacity: 0;
-    transform: translateY(0) rotate(-45deg);
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(520px) rotate(-45deg);
-  }
-}
 ````
 
 ## File: package.json
@@ -4429,6 +4014,154 @@ export default function ContactPage() {
 }
 ````
 
+## File: src/components/common/AboutSection.tsx
+````typescript
+"use client";
+import Link from "next/link";
+import { aboutContent } from "@/lib/site-content";
+type AboutSectionProps = {
+  variant?: "home" | "page";
+};
+export default function AboutSection({ variant = "page" }: AboutSectionProps) {
+  const isHome = variant === "home";
+  return (
+    <section className={isHome ? "mx-auto max-w-7xl px-4 py-16 md:px-6" : ""}>
+      <div className="rounded-[32px] bg-white p-8 shadow-sm md:p-12 lg:p-16">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div>
+            <p className="mb-4 text-xl font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+              {aboutContent.eyebrow}
+            </p>
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+              {isHome ? aboutContent.homeTitle : aboutContent.heroTitle}
+            </h2>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
+              {isHome ? aboutContent.homeDescription : aboutContent.heroDescription}
+            </p>
+            {!isHome ? (
+              <div className="mt-8 space-y-5 text-sm leading-7 text-slate-600 md:text-base md:leading-8">
+                {aboutContent.storyParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            ) : null}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/shop"
+                className="rounded-full bg-[#0f766e] px-6 py-3 text-sm font-semibold !text-white transition hover:-translate-y-1 hover:bg-[#0c5a52] hover:text-white"
+              >
+                Order Water
+              </Link>
+              <Link
+                href="/contact-us"
+                className="rounded-full border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#0f766e] hover:text-[#0f766e]"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+          <div className="rounded-[28px] bg-[#f8fafc] p-8">
+            <h3 className="text-2xl font-semibold text-slate-900">
+              What makes us reliable?
+            </h3>
+            <ul className="mt-6 space-y-5 text-slate-600">
+              {aboutContent.highlights.map((highlight) => (
+                <li key={highlight} className="flex gap-3">
+                  <span className="mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
+                    ✓
+                  </span>
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 rounded-[24px] bg-white p-6 shadow-sm">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#0f766e]">
+                Our promise
+              </p>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                Tested, trusted, and delivered fresh — every bottle is handled
+                with the care your family deserves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+````
+
+## File: src/components/shop/ProductCard.tsx
+````typescript
+import Link from "next/link";
+import type { Product } from "@/lib/products";
+import ProductActions from "@/components/shop/ProductActions";
+interface ProductCardProps {
+  product: Product;
+}
+export default function ProductCard({ product }: ProductCardProps) {
+  return (
+    <div className="bb-pro-box bg-[#fff] border border-[#eee] rounded-[20px] overflow-hidden transition-all duration-300 hover:shadow-md">
+      <div className="bb-pro-img relative overflow-hidden border-b border-[#eee]">
+        <Link href={`/shop/${product.id}`} className="block bg-[#f8f8fb]">
+          <img
+            src={product.image}
+            alt={product.product_name}
+            className="w-full h-[260px] object-contain p-[20px] transition-all duration-300 hover:scale-105"
+          />
+        </Link>
+        {product.Badge && (
+          <span className="absolute top-[15px] left-[15px] bg-[#0f766e] text-white text-[12px] font-Poppins px-[12px] py-[4px] rounded-[20px]">
+            {product.Badge}
+          </span>
+        )}
+      </div>
+      <div className="bb-pro-contact p-[20px]">
+        <div className="bb-pro-subtitle mb-[8px] flex items-center justify-between">
+          <span className="font-Poppins text-[13px] text-[#777]">
+            {product.product_category}
+          </span>
+          <span className="flex">
+            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
+            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
+            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
+            <i className="ri-star-fill text-[15px] mr-[2px] text-[#fea99a]" />
+            <i className="ri-star-line text-[15px] text-[#777]" />
+          </span>
+        </div>
+        <h4 className="bb-pro-title mb-[8px] text-[16px] leading-[18px]">
+          <Link
+            href={`/shop/${product.id}`}
+            className="font-quicksand block whitespace-nowrap overflow-hidden text-ellipsis text-[15px] leading-[18px] text-[#3d4750] font-semibold tracking-[0.03rem] hover:text-[#0f766e]"
+          >
+            {product.product_name}
+          </Link>
+        </h4>
+        <p className="font-Poppins text-[14px] text-[#686e7d] font-light leading-[24px] tracking-[0.03rem] mb-[14px] line-clamp-2">
+          {product.product_description}
+        </p>
+        <div className="bb-price flex items-center justify-between">
+          <div>
+            <span className="new-price text-[#686e7d] font-quicksand text-[16px] font-bold">
+              {product.price}
+            </span>
+          </div>
+          <span className="font-Poppins text-[13px] text-[#777]">
+            Pack Size: {product.product_packsize}
+          </span>
+        </div>
+        <div className="mt-[14px]">
+          <span className="inline-block text-[12px] font-Poppins text-[#0f766e] bg-[#f1f3ff] px-[10px] py-[4px] rounded-full">
+            {product.Tag}
+          </span>
+        </div>
+        <ProductActions productId={product.id} compact />
+      </div>
+    </div>
+  );
+}
+````
+
 ## File: src/app/layout.tsx
 ````typescript
 import type { Metadata } from "next";
@@ -4451,14 +4184,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-slate-50 pt-[105px] text-slate-900 antialiased max-[575px]:pt-[88px]">
+      <body className="bg-slate-50 pt-[86px] text-slate-900 antialiased max-[575px]:pt-[68px]">
         {" "}
         <AuthProvider>
           <CartSidebar />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
-            <FloatingWhatsApp />
+          <FloatingWhatsApp />
         </AuthProvider>
       </body>
     </html>
@@ -4572,9 +4305,258 @@ export default async function ProductDetailsPage({ params }: ProductDetailsPageP
 }
 ````
 
+## File: src/lib/site-content.ts
+````typescript
+export const homeContent = {
+  hero: {
+    eyebrow: "2goodplus Packaged Drinking Water",
+    title: "Pure Water. Pure Life.",
+    highlightedWord: "Pure Life.",
+    description:
+      "Every drop of 2goodplus packaged drinking water is purified through a 7-stage filtration process, tested to BIS standards, and sealed fresh — so you can trust every sip your family takes, every single day.",
+    ctaLabel: "Order now →",
+    ctaHref: "/shop",
+    secondaryCtaLabel: "Contact for bulk orders",
+    secondaryCtaHref: "/contact-us",
+    image: "/assets/img/hero/hero-b4.png",
+  },
+  trustStats: [
+    {
+      icon: "💧",
+      title: "7-Stage Filtration",
+      label: "Lab-tested purity",
+    },
+    {
+      icon: "🏠",
+      title: "10,000+ Happy Homes",
+      label: "Across the region",
+    },
+    {
+      icon: "✓",
+      title: "BIS Certified",
+      label: "Standard IS 14543",
+    },
+    {
+      icon: "🚚",
+      title: "Delivery within 24 hours",
+      label: "Order before 12 PM",
+    },
+  ],
+  whyChoose: {
+    eyebrow: "Why choose 2goodplus",
+    title: "Why families trust 2goodplus",
+    description:
+      "Clean, safe, and reliable packaged drinking water for homes, offices, and everyday hydration.",
+    cards: [
+      {
+        title: "Purity You Can Taste",
+        description:
+          "Our 7-stage reverse osmosis system removes 99.9% of impurities, bacteria, and heavy metals. What’s left? Only the minerals your body needs and the clean taste you deserve. No shortcuts, no compromises.",
+      },
+      {
+        title: "Safety Sealed at Source",
+        description:
+          "Each bottle is sealed at our state-of-the-art plant under ISO-controlled conditions. From fill to cap, no human hands touch your water. That’s the kind of safety standard we hold ourselves to every single day.",
+      },
+      {
+        title: "Delivered to Your Door",
+        description:
+          "Skip the supermarket queue. Order 500ml bottles, 1L packs, or 20L bulk jars online or by phone — and we’ll bring them straight to your home or office, on a schedule that works for you.",
+      },
+    ],
+  },
+};
+export const aboutContent = {
+  eyebrow: "About 2goodplus",
+  heroTitle: "We started with one simple belief — everyone deserves clean water.",
+  heroDescription:
+    "2goodplus was born from a family’s need for truly safe drinking water. Today, we supply thousands of homes and businesses with water that is tested, trusted, and delivered fresh every day.",
+  homeTitle: "Clean water, made simple for everyday life.",
+  homeDescription:
+    "2goodplus exists to make safe packaged drinking water easy to trust and easy to order. From purification to sealing and delivery, every step is handled with care so families and businesses can rely on fresh water every day.",
+  storyParagraphs: [
+    "At 2goodplus, we believe clean water should never feel like a luxury or a question mark. It should be something every family can depend on without worrying about purity, safety, or freshness. That belief became the starting point for our packaged drinking water brand.",
+    "We began with a simple goal: create drinking water that we would confidently serve in our own homes. To achieve that, our water goes through a careful 7-stage purification process designed to remove impurities, bacteria, heavy metals, and unwanted particles while keeping the taste clean and refreshing.",
+    "Every bottle is processed and sealed under controlled conditions, reducing unnecessary handling and helping maintain consistent quality from the plant to your doorstep. Our process is built around trust, because when customers choose drinking water for their family, office, shop, or event, trust matters more than anything else.",
+    "Today, 2goodplus serves homes and businesses with packaged drinking water options for daily use, office hydration, travel, events, and bulk requirements. Whether you need small bottles, 1L packs, or 20L jars, our team focuses on dependable service and timely delivery.",
+    "We are here to make hydration simple: pure water, clear communication, responsible handling, and delivery that fits your routine.",
+  ],
+  highlights: [
+    "7-stage purification process",
+    "BIS standard-focused quality checks",
+    "Freshly sealed packaged drinking water",
+    "Home, office, and bulk delivery support",
+  ],
+};
+export const contactContent = {
+  eyebrow: "Contact us",
+  title: "Get in touch — we’re happy to help",
+  description:
+    "Got a question about an order? Need bulk pricing for your office? Or just want to know more about how we make our water? We’re just a message away. Our team responds within a few hours on business days.",
+  panelTitle: "Contact details",
+  phone: "+91-9967399880",
+  whatsapp: "+91-9967399880",
+  email: "Corporate@gmhospitality.in",
+  address:
+    "Plot No. 24, DIC Industrial Sate Raniya, Kanpur Dehat- 209 304, Uttar Pradesh",
+  businessHours: "Monday – Saturday, 8:00 AM – 8:00 PM",
+  mapQuery:
+    "Plot No. 24, DIC Industrial Sate Raniya, Kanpur Dehat 209304 Uttar Pradesh",
+};
+````
+
+## File: src/styles/globals.css
+````css
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  color-scheme: light;
+  background: #f8f8fb;
+  color: #0f172a;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  background: #f8f8fb;
+  color: #0f172a;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow-x: hidden;
+}
+html,
+body,
+main,
+section {
+  width: 100%;
+}
+main {
+  overflow-x: clip;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+@keyframes wave-ripple {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-wave-ripple {
+  animation: wave-ripple 15s linear infinite;
+  will-change: transform;
+}
+.water-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.water-ripple::after {
+  content: "";
+  position: absolute;
+  inset: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(15, 118, 110, 0.35);
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripplePulse 2.8s infinite;
+}
+@keyframes ripplePulse {
+  0% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(9);
+  }
+}
+.water-wave-divider {
+  line-height: 0;
+  overflow: hidden;
+  background: transparent;
+}
+.water-wave-divider svg {
+  display: block;
+  width: 100%;
+  height: 0px;
+}
+.droplet-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.droplet {
+  position: absolute;
+  top: -20px;
+  width: 9px;
+  height: 13px;
+  border-radius: 999px 999px 999px 0;
+  background: rgba(15, 118, 110, 0.16);
+  transform: rotate(-45deg);
+  animation: dropletFall 7s linear infinite;
+}
+.droplet:nth-child(1) {
+  left: 12%;
+  animation-delay: 0s;
+}
+.droplet:nth-child(2) {
+  left: 34%;
+  animation-delay: 1.4s;
+}
+.droplet:nth-child(3) {
+  left: 58%;
+  animation-delay: 2.8s;
+}
+.droplet:nth-child(4) {
+  left: 76%;
+  animation-delay: 4.2s;
+}
+.droplet:nth-child(5) {
+  left: 90%;
+  animation-delay: 5.6s;
+}
+@keyframes dropletFall {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(-45deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(520px) rotate(-45deg);
+  }
+}
+````
+
 ## File: src/components/common/Footer.tsx
 ````typescript
 import Link from "next/link";
+import WaterDroplets from "./WaterDroplets";
 const wellnessCategories = [
   { label: "Natural Drinking Water", href: "/shop" },
   { label: "Jeera Wellness Drinks", href: "/shop" },
@@ -4597,28 +4579,6 @@ const accountLinks = [
   { label: "Sign In", href: "/login" },
   { label: "View Cart", href: "/cart" },
 ];
-const socialLinks = [
-  {
-    name: "facebook",
-    icon: "/assets/img/social/facebook.svg",
-    href: "#",
-  },
-  {
-    name: "twitter",
-    icon: "/assets/img/social/twitter.svg",
-    href: "#",
-  },
-  {
-    name: "linkedin",
-    icon: "/assets/img/social/linkedin.svg",
-    href: "#",
-  },
-  {
-    name: "instagram",
-    icon: "/assets/img/social/instagram.svg",
-    href: "#",
-  },
-];
 function FooterColumn({
   title,
   links,
@@ -4628,7 +4588,7 @@ function FooterColumn({
 }) {
   return (
     <div className="bb-footer-widget">
-      <h4 className="mb-5 border-b border-white/10 pb-4 font-quicksand text-[18px] font-bold text-slate-700">
+      <h4 className="mb-5 border-b border-[#0f766e]/10 pb-4 font-quicksand text-[18px] font-bold text-slate-700">
         {title}
       </h4>
       <ul>
@@ -4636,7 +4596,7 @@ function FooterColumn({
           <li key={item.label} className="mb-4">
             <Link
               href={item.href}
-              className="font-Poppins text-[14px] leading-5 text-slate-300 transition hover:text-[#0f766e]"
+              className="font-Poppins text-[14px] leading-5 text-slate-500 transition hover:text-[#0f766e]"
             >
               {item.label}
             </Link>
@@ -4648,18 +4608,35 @@ function FooterColumn({
 }
 export default function Footer() {
   return (
-    <footer className="bb-footer mt-[50px] bg-[#f8f8fb] text-slate-700 max-[1199px]:mt-[35px]">
-      <div className="border-t border-white/10">
+    <footer className="bb-footer relative mt-[80px] bg-[#f8f8fb] text-slate-700 max-[1199px]:mt-[60px]">
+      {}
+      <div className="absolute left-0 right-0 top-0 -translate-y-[99%] overflow-hidden leading-[0]">
+        <svg
+          className="animate-wave-ripple h-[40px] w-[200%] sm:h-[60px] lg:h-[80px]"
+          viewBox="0 0 2880 120"
+          preserveAspectRatio="none"
+          fill="#f8f8fb"
+        >
+          <path d="M0,64 C240,120 480,0 720,56 C960,112 1200,24 1440,72 C1680,120 1920,0 2160,56 C2400,112 2640,24 2880,72 L2880,120 L0,120 Z" />
+        </svg>
+      </div>
+      {}
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
+        <WaterDroplets />
+      </div>
+      {}
+      <div className="relative z-10 border-t border-slate-200/50">
         <div className="py-[50px] max-[1199px]:py-[35px]">
           <div className="mx-auto flex max-w-[1320px] flex-wrap px-3">
             {}
             <div className="w-full px-3 lg:w-[25%]">
               <div className="mb-10 flex flex-col lg:mb-0">
-                <Link href="/" className="mb-7 flex items-center gap-3">
+                {}
+                <Link href="/" className="water-ripple mb-7 inline-flex items-center gap-3 rounded-full w-fit">
                   <img
                     src="/assets/img/logo/logo-icon2.png"
                     alt="2gooD logo icon"
-                    className="h-16 w-16 shrink-0 object-contain"
+                    className="h-16 w-16 shrink-0 object-contain relative z-10"
                   />
                 </Link>
                 <p className="mb-7 max-w-[400px] font-Poppins text-[14px] leading-[27px] text-slate-500">
@@ -4669,11 +4646,9 @@ export default function Footer() {
                   freshness and trust for homes, offices, events, and
                   businesses.
                 </p>
-                {
-}
               </div>
             </div>
-            <div className="w-full px-3 sm:w-1/2  lg:w-[16.66%]">
+            <div className="w-full px-3 sm:w-1/2 lg:w-[16.66%]">
               <FooterColumn title="Products" links={ProductsAndServices} />
             </div>
             <div className="w-full px-3 sm:w-1/2 text-slate-700 lg:w-[16.66%]">
@@ -4685,7 +4660,7 @@ export default function Footer() {
             {}
             <div className="w-full px-3 sm:w-1/2 lg:w-[25%]">
               <div className="bb-footer-widget">
-                <h4 className="mb-5 border-b border-white/10 pb-4 font-quicksand text-[18px] font-bold text-slate-700">
+                <h4 className="mb-5 border-b border-[#0f766e]/10 pb-4 font-quicksand text-[18px] font-bold text-slate-700">
                   Contact
                 </h4>
                 <ul>
@@ -4705,8 +4680,6 @@ export default function Footer() {
                       +91 99673 99880
                     </Link>
                   </li>
-                  {
-}
                   <li className="mb-4 flex items-center">
                     <span className="mr-3 text-[#0f766e]">✉</span>
                     <Link
@@ -4725,20 +4698,18 @@ export default function Footer() {
                     </p>
                   </li>
                 </ul>
-                {
-}
               </div>
             </div>
           </div>
         </div>
         {}
-        <div className="border-t border-white/10 py-4">
+        <div className="border-t border-slate-200/50 py-4">
           <div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-4 px-6 max-[991px]:flex-col">
-            <div className="font-Poppins text-[13px] leading-7 tracking-[1px] text-slate-600">
+            <div className="font-Poppins text-[13px] leading-7 tracking-[1px] text-slate-500">
               Copyright © 2026{" "}
               <Link
                 href="/"
-                className="font-medium text-[#0f766e] transition hover:text-white"
+                className="font-medium text-[#0f766e] transition hover:text-[#0c5a52]"
               >
                 2gooD
               </Link>{" "}
@@ -4748,7 +4719,7 @@ export default function Footer() {
               <img
                 src="/assets/img/payment/payment.png"
                 alt="Payment methods"
-                className="max-h-8 max-w-full"
+                className="max-h-8 max-w-full relative z-10"
               />
             </div>
           </div>
@@ -4784,7 +4755,9 @@ export default function ShopPage() {
   };
   const handlePriceChange = (range: string) => {
     setSelectedPrices((prev) =>
-      prev.includes(range) ? prev.filter((item) => item !== range) : [...prev, range],
+      prev.includes(range)
+        ? prev.filter((item) => item !== range)
+        : [...prev, range],
     );
   };
   const handleTagClick = (tag: string) => {
@@ -4804,14 +4777,21 @@ export default function ShopPage() {
     if (searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
       result = result.filter((product) =>
-        [product.product_name, product.product_description, product.product_category, product.Tag]
+        [
+          product.product_name,
+          product.product_description,
+          product.product_category,
+          product.Tag,
+        ]
           .join(" ")
           .toLowerCase()
           .includes(query),
       );
     }
     if (selectedCategory) {
-      result = result.filter((product) => product.product_category === selectedCategory);
+      result = result.filter(
+        (product) => product.product_category === selectedCategory,
+      );
     }
     if (selectedTags.length > 0) {
       result = result.filter((product) => selectedTags.includes(product.Tag));
@@ -4837,9 +4817,19 @@ export default function ShopPage() {
       result.sort((a, b) => a.product_name.localeCompare(b.product_name));
     }
     return result;
-  }, [productsState, searchQuery, selectedCategory, selectedPrices, selectedTags, sortBy]);
+  }, [
+    productsState,
+    searchQuery,
+    selectedCategory,
+    selectedPrices,
+    selectedTags,
+    sortBy,
+  ]);
   const hasActiveFilters =
-    Boolean(searchQuery) || selectedCategory || selectedPrices.length > 0 || selectedTags.length > 0;
+    Boolean(searchQuery) ||
+    selectedCategory ||
+    selectedPrices.length > 0 ||
+    selectedTags.length > 0;
   const productCategories = useMemo(() => {
     return Array.from(new Set(productsState.map((p) => p.product_category)));
   }, [productsState]);
@@ -4858,12 +4848,12 @@ export default function ShopPage() {
             setError(null);
           } else {
             setProductsState([]);
-            setError('Failed to load products');
+            setError("Failed to load products");
           }
         }
       } catch (error) {
         if (!cancelled) {
-          setError('Failed to load products');
+          setError("Failed to load products");
           setProductsState([]);
         }
       } finally {
@@ -4884,10 +4874,11 @@ export default function ShopPage() {
               Hydrate • Heal • Feel Good
             </p>
             <h1 className="font-quicksand text-[34px] max-[767px]:text-[28px] font-bold text-[#3d4750] mb-[10px]">
-              Shop Wellness Products
+              Pure Hydration, Delivered Fresh
             </h1>
             <p className="font-Poppins text-[15px] text-[#686e7d] max-w-[620px] mx-auto leading-[26px]">
-              Explore natural hydration products, jeera drinks, herbal infusions, and healthy daily essentials.
+              Premium packaged drinking water for homes, offices, events, and
+              businesses{" "}
             </p>
           </div>
           <div className="flex flex-wrap mx-[-12px]">
@@ -4916,45 +4907,38 @@ export default function ShopPage() {
                           key={category}
                           onClick={() => handleCategoryClick(category)}
                           className={`flex items-center justify-between py-[10px] px-[8px] rounded-[8px] cursor-pointer transition-all ${
-                            isSelected ? "bg-indigo-50/80" : "hover:bg-[#f9fafb]"
+                            isSelected
+                              ? "bg-indigo-50/80"
+                              : "hover:bg-[#f9fafb]"
                           }`}
                         >
                           <span
                             className={`font-Poppins text-[14px] transition-colors ${
-                              isSelected ? "text-[#4f46e5] font-medium" : "text-[#4b5563]"
+                              isSelected
+                                ? "text-[#4f46e5] font-medium"
+                                : "text-[#4b5563]"
                             }`}
                           >
                             {category}
                           </span>
                           <span
                             className={`font-Poppins text-[12px] font-medium px-[8px] py-[2px] rounded-full transition-colors ${
-                              isSelected ? "bg-[#4f46e5] text-white" : "bg-[#f3f4f6] text-[#6b7280]"
+                              isSelected
+                                ? "bg-[#4f46e5] text-white"
+                                : "bg-[#f3f4f6] text-[#6b7280]"
                             }`}
                           >
-                            {productsState.filter((product) => product.product_category === category).length}
+                            {
+                              productsState.filter(
+                                (product) =>
+                                  product.product_category === category,
+                              ).length
+                            }
                           </span>
                         </li>
                       );
                     })}
                   </ul>
-                </div>
-                <div className="sidebar-block bg-white border border-[#e5e7eb] rounded-[20px] p-[24px] shadow-sm">
-                  <h4 className="font-quicksand text-[18px] font-bold text-[#1f2937] mb-[18px]">
-                    Price Range
-                  </h4>
-                  <div className="space-y-[12px]">
-                    {["Under $15", "$15 - $30", "Above $30"].map((range) => (
-                      <label key={range} className="flex items-center gap-[10px] font-Poppins text-[14px] text-[#4b5563] cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedPrices.includes(range)}
-                          onChange={() => handlePriceChange(range)}
-                          className="w-4 h-4 accent-[#4f46e5]"
-                        />
-                        {range}
-                      </label>
-                    ))}
-                  </div>
                 </div>
                 <div className="sidebar-block bg-white border border-[#e5e7eb] rounded-[20px] p-[24px] shadow-sm">
                   <h4 className="font-quicksand text-[18px] font-bold text-[#1f2937] mb-[18px]">
@@ -4994,7 +4978,11 @@ export default function ShopPage() {
             <div className="min-[992px]:w-[75%] w-full px-[12px] order-1 max-[991px]:order-2">
               <div className="mb-[24px] flex flex-wrap items-center justify-between gap-[16px] rounded-[20px] border border-[#e5e7eb] bg-white p-[18px] shadow-sm">
                 <p className="font-Poppins text-[14px] text-[#686e7d]">
-                  Showing <span className="font-semibold text-[#3d4750]">{filteredAndSortedProducts?.length}</span> products
+                  Showing{" "}
+                  <span className="font-semibold text-[#3d4750]">
+                    {filteredAndSortedProducts?.length}
+                  </span>{" "}
+                  products
                 </p>
                 <select
                   value={sortBy}
@@ -5015,7 +5003,9 @@ export default function ShopPage() {
                 </div>
               ) : (
                 <div className="rounded-[20px] border border-[#e5e7eb] bg-white py-[60px] text-center">
-                  <p className="font-Poppins text-[16px] text-[#6b7280]">No products match your search criteria.</p>
+                  <p className="font-Poppins text-[16px] text-[#6b7280]">
+                    No products match your search criteria.
+                  </p>
                 </div>
               )}
             </div>
@@ -5037,6 +5027,7 @@ import { useUiStore } from "@/store/useUiStore";
 import { useCartStore } from "@/store/useCartStore";
 const navItems = [
   { label: "Home", href: "/" },
+  { label: "Products", href: "/shop" },
   { label: "About Us", href: "/about-us" },
   { label: "Contact Us", href: "/contact-us" },
 ];
@@ -5138,30 +5129,8 @@ export default function Header() {
                 )}
               </ul>
             </div>
-            <button
-              type="button"
-              onClick={toggleCart}
-              className="relative text-[#3d4750] transition hover:text-[#0f766e]"
-              aria-label="Cart"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#0f766e] text-[11px] font-bold text-white">
-                {cartCount}
-              </span>
-            </button>
+{
+}
             <a
               href="tel:+919967399880"
               className="hidden lg:flex items-center gap-3 rounded-full bg-[#0f766e] px-4 py-2 text-white shadow-md transition hover:bg-[#0d5f59]"
@@ -5304,27 +5273,34 @@ const categories = [
   {
     title: "Packaged Drinking Water",
     subtitle: "Fresh sealed water for daily hydration",
-    icon: "/assets/img/category/1.svg",
+    icon: "/assets/img/category/1.png",
     color: "bg-[#fff1f1]",
   },
   {
     title: "Home Delivery",
     subtitle: "Bottles and jars delivered to your door",
-    icon: "/assets/img/category/2.svg",
+    icon: "/assets/img/category/2.png",
     color: "bg-[#e9fff8]",
   },
   {
     title: "Office Hydration",
     subtitle: "Reliable bulk water supply for teams",
-    icon: "/assets/img/category/3.svg",
+    icon: "/assets/img/category/3.png",
     color: "bg-[#f3f1ff]",
   },
   {
     title: "Bulk Orders",
-    subtitle: "500ml, 1L packs, and 20L jars",
-    icon: "/assets/img/category/4.svg",
+    subtitle: "Orders On 500ml, 1L packs, and 20L jars",
+    icon: "/assets/img/category/4.png",
     color: "bg-[#fff9e6]",
   },
+];
+const bulkOrderItems = [
+  "Corporate Orders",
+  "Events & Weddings",
+  "Hotels & Restaurants",
+  "Retailers & Distributors",
+  "Schools & Institutions",
 ];
 function SectionHeading({
   eyebrow,
@@ -5347,53 +5323,6 @@ function SectionHeading({
         <p className="mt-4 text-sm leading-7 text-slate-600">{text}</p>
       ) : null}
     </div>
-  );
-}
-function HomeProductCard({ product }: { product: ProductApiResponse }) {
-  return (
-    <article className="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-      <div className="relative overflow-hidden border-b border-slate-100 bg-[#f8f8fb]">
-        {product.Badge ? (
-          <span className="absolute left-4 top-4 z-10 rounded-full bg-[#0f766e] px-3 py-1 text-xs font-semibold text-white">
-            {product.Badge}
-          </span>
-        ) : null}
-        <Link href={`/shop/${product.id}`}>
-          <img
-            src={product.image}
-            alt={product.product_name}
-            className="h-64 w-full object-contain p-5 transition-transform duration-700 group-hover:scale-110"
-          />
-        </Link>
-      </div>
-      <div className="p-6">
-        <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
-          {product.product_category}
-        </p>
-        <h3 className="mt-3 line-clamp-1 text-xl font-semibold text-slate-900">
-          {product.product_name}
-        </h3>
-        <p className="mt-3 line-clamp-2 text-sm leading-7 text-slate-600">
-          {product.product_description}
-        </p>
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <div>
-            <span className="text-lg font-semibold text-slate-900">
-              {product.price}
-            </span>
-            <p className="mt-1 text-xs text-slate-500">
-              Stock: {product.Stock}
-            </p>
-          </div>
-          <Link
-            href={`/shop/${product.id}`}
-            className="rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#5768b0] hover:shadow-lg"
-          >
-            View
-          </Link>
-        </div>
-      </div>
-    </article>
   );
 }
 export default function HomePage() {
@@ -5419,38 +5348,38 @@ export default function HomePage() {
   const featuredProducts = useMemo(() => products.slice(0, 4), [products]);
   const newArrivals = useMemo(() => products.slice(8, 12), [products]);
   return (
-    <main className="overflow-hidden pb-16">
-      <section className="water-ripple relative overflow-hidden bg-[#f6f7ff]">
+    <main className="overflow-hidden pb-6">
+      <section className="water-ripple relative isolate overflow-hidden bg-[#f6f7ff]">
         <WaterDroplets />
-        <div className="relative min-h-[430px] lg:min-h-[460px]">
+        <div className="relative min-h-[unset] sm:min-h-[420px] lg:min-h-[500px]">
           <img
             src={homeContent.hero.image}
             alt="2goodplus packaged drinking water"
-            className="absolute inset-0 h-full w-full object-cover object-bottom"
+            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-35 sm:object-center sm:opacity-100"
           />
           {}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
-          <div className="relative z-10 mx-auto flex min-h-[430px] max-w-7xl items-center px-4 py-16 md:px-6 lg:min-h-[460px]">
-            <div className="max-w-2xl py-8">
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/80 to-transparent sm:bg-gradient-to-r sm:from-white/95" />
+          <div className="relative z-10 mx-auto flex min-h-[unset] max-w-7xl items-center px-4 py-10 sm:min-h-[420px] sm:px-6 sm:py-14 lg:min-h-[500px] lg:py-16">
+            <div className="w-full max-w-[620px] text-center sm:text-left">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#0f766e] sm:mb-4 sm:text-sm">
                 {homeContent.hero.eyebrow}
               </p>
-              <h1 className="mb-6 text-4xl font-bold leading-[1.1] text-[#3d4750] sm:text-[44px] md:text-[52px] lg:text-[68px]">
-                <span className="text-[#0f766e]">PureWater. Pure Life.</span>
+              <h1 className="mb-4 text-[clamp(32px,11vw,44px)] font-bold leading-[1.08] text-[#3d4750] sm:text-[54px] lg:text-[68px]">
+                <span className="text-[#0f766e]">Pure Water. Pure Life.</span>
               </h1>
-              <p className="max-w-xl text-base leading-8 text-slate-700 sm:text-lg">
+              <p className="mx-auto max-w-xl text-sm leading-7 text-slate-700 sm:mx-0 sm:text-base sm:leading-8 lg:text-lg">
                 {homeContent.hero.description}
               </p>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
                 <Link
                   href={homeContent.hero.ctaHref}
-                  className="water-ripple relative overflow-hidden rounded-full bg-[#0f766e] px-5 py-4 text-base font-semibold !text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52]"
+                  className="water-ripple relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#0f766e] px-6 py-3.5 text-sm font-semibold !text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52] sm:w-auto sm:px-7 sm:py-4 sm:text-base"
                 >
                   {homeContent.hero.ctaLabel}
                 </Link>
                 <Link
                   href={homeContent.hero.secondaryCtaHref}
-                  className="water-ripple relative overflow-hidden rounded-full border border-[#0f766e]/30 bg-white px-5 py-4 text-base font-semibold !text-black transition-all duration-300 hover:-translate-y-1 hover:bg-[#0f766e] hover:!text-white"
+                  className="water-ripple relative inline-flex w-full items-center justify-center overflow-hidden rounded-full border border-[#0f766e]/30 bg-white/95 px-6 py-3.5 text-sm font-semibold !text-[#0f172a] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0f766e] hover:!text-white sm:w-auto sm:px-7 sm:py-4 sm:text-base"
                 >
                   {homeContent.hero.secondaryCtaLabel} →
                 </Link>
@@ -5460,48 +5389,34 @@ export default function HomePage() {
         </div>
       </section>
       <WaterWaveDivider />
-      <section className="relative z-10 mx-auto mt-2 max-w-7xl px-4 md:px-6">
-        <div className="grid gap-4 rounded-[28px] bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:grid-cols-2 lg:grid-cols-4">
-          {homeContent.trustStats.map((stat) => (
-            <div
-              key={stat.title}
-              className="flex flex-col items-start gap-4 rounded-[20px] border border-slate-100 bg-white p-4 sm:flex-row sm:items-center"
-            >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#0f766e]/10 text-xl text-[#0f766e]">
-                {stat.icon}
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">
-                  {stat.title}
-                </p>
-                <p className="mt-1 text-xs text-slate-500">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      <WaterWaveDivider />
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
         <SectionHeading
           eyebrow="Water solutions"
           title="Packaged drinking water for homes, offices, and everyday use."
         />
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {categories.map((category) => (
             <Link
               href="/shop"
               key={category.title}
-              className={`${category.color} group rounded-[28px] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-7`}
+              className={`${category.color} group flex flex-col items-center rounded-[28px] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8`}
             >
-              <img
-                src={category.icon}
-                alt={category.title}
-                className="mx-auto mb-4 h-14 w-14 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
-              />
-              <h3 className="text-lg font-semibold text-slate-900">
-                {category.title}
-              </h3>
-              <p className="mt-2 text-sm text-slate-600">{category.subtitle}</p>
+              {}
+              <div className="mb-6 w-full max-w-[220px] aspect-video overflow-hidden rounded-2xl shadow-sm bg-white/50">
+                <img
+                  src={category.icon}
+                  alt={category.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <div className="flex flex-col flex-grow justify-between max-w-[240px]">
+                <h3 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl transition-colors duration-300 group-hover:text-teal-600">
+                  {category.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500 font-medium">
+                  {category.subtitle}
+                </p>
+              </div>
             </Link>
           ))}
         </div>
@@ -5540,50 +5455,138 @@ export default function HomePage() {
       <WaterWaveDivider />
       <DeliveryCoverage />
       <WaterWaveDivider />
-      {
-}
+      <section className="relative overflow-hidden bg-[#f8fafc] px-4 py-16 md:px-6 md:py-20">
+        <WaterDroplets />
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="rounded-[32px] bg-white p-6 shadow-[0_20px_55px_rgba(15,23,42,0.08)] sm:p-8 lg:p-10">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+                Bulk Orders
+              </p>
+              <h2 className="mt-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                Need bulk quantities for your business or event?
+              </h2>
+              <p className="mt-5 text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+                Ideal for hotels, restaurants, institutions, offices, retailers,
+                and distributors. Bulk order rates and dealership pricing are
+                negotiable based on quantity requirements.
+              </p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  href="/contact-us"
+                  className="water-ripple relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-[#0f766e] px-7 py-4 text-sm font-bold !text-white shadow-[0_12px_30px_rgba(15,118,110,0.25)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52] sm:w-auto"
+                >
+                  For Bulk Orders contact us
+                </Link>
+                <a
+                  href="tel:+919967399880"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-[#0f766e]/25 bg-white px-7 py-4 text-sm font-bold text-[#0f766e] transition-all duration-300 hover:-translate-y-1 hover:bg-[#e8f7f4] sm:w-auto"
+                >
+                  Call +91 99673 99880
+                </a>
+              </div>
+            </div>
+            <div className="rounded-[32px] bg-[#0f766e] p-6 text-white shadow-[0_20px_55px_rgba(15,118,110,0.22)] sm:p-8 lg:p-10">
+              <div className="mb-6 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
+                    Bulk Order Information
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold sm:text-3xl">
+                    Customized pricing for
+                  </h3>
+                </div>
+                <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/15 text-2xl sm:flex">
+                  💧
+                </span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {bulkOrderItems.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white ring-1 ring-white/15"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[#0f766e]">
+                      ✓
+                    </span>
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-7 rounded-3xl bg-white/10 p-5 ring-1 ring-white/15">
+                <p className="text-sm leading-7 text-white/85">
+                  Contact us with your quantity requirement, delivery location,
+                  and frequency. Our team will share a custom quotation for your
+                  order.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <WaterWaveDivider />
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-16 md:grid-cols-2 md:px-6">
-        <article className="group relative overflow-hidden rounded-[30px] bg-[#edf1ff] p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8">
+        {}
+        <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#edf1ff] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
+          {}
           <img
-            src="/assets/img/banner-one/one.jpg"
+            src="/assets/img/category/1.png"
             alt="Packaged drinking water for home"
-            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="relative mx-auto max-w-xl py-10 px-5 sm:px-7">
-            <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-              Fresh Water for Your Family
-            </h3>
-            <p className="mt-3 text-slate-600 sm:text-base">
-              Clean packaged drinking water sealed fresh for everyday trust.
-            </p>
-            <Link
-              href="/about-us"
-              className="water-ripple relative mt-6 inline-flex overflow-hidden rounded-full bg-[#0f766e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52]"
-            >
-              Order Now
-            </Link>
+          {}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf1ff]/95 via-[#edf1ff]/80 to-transparent sm:from-[#edf1ff]/90"></div>
+          {}
+          <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
+            <div className="max-w-md">
+              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
+                Residential
+              </span>
+              <h3 className="mb-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
+                Fresh Water for Your Family
+              </h3>
+              <p className="mb-8 text-base text-slate-700 sm:text-lg">
+                Clean packaged drinking water sealed fresh for everyday trust.
+              </p>
+              <div>
+                <Link
+                  href="/shop"
+                  className="water-ripple relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#0f766e] px-7 py-3.5 text-base font-semibold !text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52] hover:shadow-lg"
+                >
+                  Order Now
+                </Link>
+              </div>
+            </div>
           </div>
         </article>
-        <article className="group relative overflow-hidden rounded-[30px] bg-[#fff7ea] p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8">
+        <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#fff7ea] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
           <img
-            src="/assets/img/banner-one/two.jpg"
+            src="/assets/img/category/2.png"
             alt="Bulk packaged water delivery"
-            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="relative mx-auto max-w-xl py-10 px-5 sm:px-7">
-            <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-              Bulk Supply for Offices
-            </h3>
-            <p className="mt-3 text-slate-600 sm:text-base">
-              Need regular water delivery for your office or business? We can
-              help.
-            </p>
-            <Link
-              href="/contact-us"
-              className="water-ripple relative mt-6 inline-flex overflow-hidden rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0f766e] hover:text-white"
-            >
-              Contact Us
-            </Link>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fff7ea]/95 via-[#fff7ea]/80 to-transparent sm:from-[#fff7ea]/90"></div>
+          <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
+            <div className="max-w-md">
+              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
+                Commercial
+              </span>
+              <h3 className="mb-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
+                Bulk Supply for Offices
+              </h3>
+              <p className="mb-8 text-base text-slate-700 sm:text-lg">
+                Need regular water delivery for your office or business? We can
+                help.
+              </p>
+              <div>
+                <Link
+                  href="/contact-us"
+                  className="water-ripple relative inline-flex items-center justify-center overflow-hidden rounded-full border border-[#0f766e]/20 bg-white/95 px-7 py-3.5 text-base font-semibold text-slate-900 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#0f766e] hover:bg-[#0f766e] hover:!text-white hover:shadow-lg"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </div>
           </div>
         </article>
       </section>

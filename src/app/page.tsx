@@ -16,25 +16,25 @@ const categories = [
   {
     title: "Packaged Drinking Water",
     subtitle: "Fresh sealed water for daily hydration",
-    icon: "/assets/img/category/1.svg",
+    icon: "/assets/img/category/1.png",
     color: "bg-[#fff1f1]",
   },
   {
     title: "Home Delivery",
     subtitle: "Bottles and jars delivered to your door",
-    icon: "/assets/img/category/2.svg",
+    icon: "/assets/img/category/2.png",
     color: "bg-[#e9fff8]",
   },
   {
     title: "Office Hydration",
     subtitle: "Reliable bulk water supply for teams",
-    icon: "/assets/img/category/3.svg",
+    icon: "/assets/img/category/3.png",
     color: "bg-[#f3f1ff]",
   },
   {
     title: "Bulk Orders",
-    subtitle: "500ml, 1L packs, and 20L jars",
-    icon: "/assets/img/category/4.svg",
+    subtitle: "Orders On 500ml, 1L packs, and 20L jars",
+    icon: "/assets/img/category/4.png",
     color: "bg-[#fff9e6]",
   },
 ];
@@ -68,54 +68,6 @@ function SectionHeading({
         <p className="mt-4 text-sm leading-7 text-slate-600">{text}</p>
       ) : null}
     </div>
-  );
-}
-
-function HomeProductCard({ product }: { product: ProductApiResponse }) {
-  return (
-    <article className="group overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-      <div className="relative overflow-hidden border-b border-slate-100 bg-[#f8f8fb]">
-        {product.Badge ? (
-          <span className="absolute left-4 top-4 z-10 rounded-full bg-[#0f766e] px-3 py-1 text-xs font-semibold text-white">
-            {product.Badge}
-          </span>
-        ) : null}
-        <Link href={`/shop/${product.id}`}>
-          <img
-            src={product.image}
-            alt={product.product_name}
-            className="h-64 w-full object-contain p-5 transition-transform duration-700 group-hover:scale-110"
-          />
-        </Link>
-      </div>
-      <div className="p-6">
-        <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
-          {product.product_category}
-        </p>
-        <h3 className="mt-3 line-clamp-1 text-xl font-semibold text-slate-900">
-          {product.product_name}
-        </h3>
-        <p className="mt-3 line-clamp-2 text-sm leading-7 text-slate-600">
-          {product.product_description}
-        </p>
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <div>
-            <span className="text-lg font-semibold text-slate-900">
-              {product.price}
-            </span>
-            <p className="mt-1 text-xs text-slate-500">
-              Stock: {product.Stock}
-            </p>
-          </div>
-          <Link
-            href={`/shop/${product.id}`}
-            className="rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#5768b0] hover:shadow-lg"
-          >
-            View
-          </Link>
-        </div>
-      </div>
-    </article>
   );
 }
 
@@ -193,30 +145,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <WaterWaveDivider />
-
-      <section className="relative z-10 mx-auto mt-2 max-w-7xl px-4 md:px-6">
-        <div className="grid gap-4 rounded-[28px] bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.08)] sm:grid-cols-2 lg:grid-cols-4">
-          {homeContent.trustStats.map((stat) => (
-            <div
-              key={stat.title}
-              className="flex flex-col items-start gap-4 rounded-[20px] border border-slate-100 bg-white p-4 sm:flex-row sm:items-center"
-            >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#0f766e]/10 text-xl text-[#0f766e]">
-                {stat.icon}
-              </span>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">
-                  {stat.title}
-                </p>
-                <p className="mt-1 text-xs text-slate-500">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
+  
       <WaterWaveDivider />
 
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
@@ -224,22 +153,31 @@ export default function HomePage() {
           eyebrow="Water solutions"
           title="Packaged drinking water for homes, offices, and everyday use."
         />
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+
+        {/* Added a margin-top (mt-12) to ensure breathing room below your heading */}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {categories.map((category) => (
             <Link
               href="/shop"
               key={category.title}
-              className={`${category.color} group rounded-[28px] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-7`}
+              className={`${category.color} group flex flex-col items-center rounded-[28px] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8`}
             >
-              <img
-                src={category.icon}
-                alt={category.title}
-                className="mx-auto mb-4 h-14 w-14 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
-              />
-              <h3 className="text-lg font-semibold text-slate-900">
-                {category.title}
-              </h3>
-              <p className="mt-2 text-sm text-slate-600">{category.subtitle}</p>
+              {/* NEW IMAGE WRAPPER */}
+              <div className="mb-6 w-full max-w-[220px] aspect-video overflow-hidden rounded-2xl shadow-sm bg-white/50">
+                <img
+                  src={category.icon}
+                  alt={category.title}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <div className="flex flex-col flex-grow justify-between max-w-[240px]">
+                <h3 className="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl transition-colors duration-300 group-hover:text-teal-600">
+                  {category.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500 font-medium">
+                  {category.subtitle}
+                </p>
+              </div>
             </Link>
           ))}
         </div>
@@ -358,74 +296,72 @@ export default function HomePage() {
 
       <WaterWaveDivider />
 
-      {/* <section className="mx-auto max-w-7xl px-4 md:px-6">
-        <div className="rounded-[32px] bg-white p-8 shadow-sm">
-          <SectionHeading
-            eyebrow="Featured products"
-            title="Order fresh 2goodplus drinking water for daily hydration."
-          />
-          {loading ? (
-            <p className="text-center text-sm text-slate-500">Loading featured products…</p>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {featuredProducts.map((product) => (
-                <HomeProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-          <div className="mt-10 text-center">
-            <Link
-              href="/shop"
-              className="inline-flex rounded-full bg-[#0f766e] px-7 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#5768b0] hover:shadow-lg"
-            >
-              View All Products
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-16 md:grid-cols-2 md:px-6">
-        <article className="group relative overflow-hidden rounded-[30px] bg-[#edf1ff] p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8">
+        {/* Card 1: Residential */}
+        <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#edf1ff] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
+          {/* Background Image */}
           <img
-            src="/assets/img/banner-one/one.jpg"
+            src="/assets/img/category/1.png"
             alt="Packaged drinking water for home"
-            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="relative mx-auto max-w-xl py-10 px-5 sm:px-7">
-            <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-              Fresh Water for Your Family
-            </h3>
-            <p className="mt-3 text-slate-600 sm:text-base">
-              Clean packaged drinking water sealed fresh for everyday trust.
-            </p>
-            <Link
-              href="/shop"
-              className="water-ripple relative mt-6 inline-flex overflow-hidden rounded-full bg-[#0f766e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52]"
-            >
-              Order Now
-            </Link>
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf1ff]/95 via-[#edf1ff]/80 to-transparent sm:from-[#edf1ff]/90"></div>
+
+          {/* Content */}
+          <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
+            <div className="max-w-md">
+              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
+                Residential
+              </span>
+              <h3 className="mb-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
+                Fresh Water for Your Family
+              </h3>
+              <p className="mb-8 text-base text-slate-700 sm:text-lg">
+                Clean packaged drinking water sealed fresh for everyday trust.
+              </p>
+              <div>
+                <Link
+                  href="/shop"
+                  className="water-ripple relative inline-flex items-center justify-center overflow-hidden rounded-full bg-[#0f766e] px-7 py-3.5 text-base font-semibold !text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:bg-[#0c5a52] hover:shadow-lg"
+                >
+                  Order Now
+                </Link>
+              </div>
+            </div>
           </div>
         </article>
-        <article className="group relative overflow-hidden rounded-[30px] bg-[#fff7ea] p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8">
+
+        <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#fff7ea] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
           <img
-            src="/assets/img/banner-one/two.jpg"
+            src="/assets/img/category/2.png"
             alt="Bulk packaged water delivery"
-            className="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="relative mx-auto max-w-xl py-10 px-5 sm:px-7">
-            <h3 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-              Bulk Supply for Offices
-            </h3>
-            <p className="mt-3 text-slate-600 sm:text-base">
-              Need regular water delivery for your office or business? We can
-              help.
-            </p>
-            <Link
-              href="/contact-us"
-              className="water-ripple relative mt-6 inline-flex overflow-hidden rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0f766e] hover:text-white"
-            >
-              Contact Us
-            </Link>
+
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fff7ea]/95 via-[#fff7ea]/80 to-transparent sm:from-[#fff7ea]/90"></div>
+
+          <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
+            <div className="max-w-md">
+              <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
+                Commercial
+              </span>
+              <h3 className="mb-3 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl">
+                Bulk Supply for Offices
+              </h3>
+              <p className="mb-8 text-base text-slate-700 sm:text-lg">
+                Need regular water delivery for your office or business? We can
+                help.
+              </p>
+              <div>
+                <Link
+                  href="/contact-us"
+                  className="water-ripple relative inline-flex items-center justify-center overflow-hidden rounded-full border border-[#0f766e]/20 bg-white/95 px-7 py-3.5 text-base font-semibold text-slate-900 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#0f766e] hover:bg-[#0f766e] hover:!text-white hover:shadow-lg"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </div>
           </div>
         </article>
       </section>
