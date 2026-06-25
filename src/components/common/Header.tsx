@@ -1,19 +1,15 @@
 "use client";
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useUiStore } from "@/store/useUiStore";
 import { useCartStore } from "@/store/useCartStore";
-
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Products", href: "/shop" },
-
   { label: "About Us", href: "/about-us" },
   { label: "Contact Us", href: "/contact-us" },
 ];
-
 export default function Header() {
   const { data: session, status } = useSession();
   const toggleCart = useUiStore((state) => state.toggleCart);
@@ -21,42 +17,34 @@ export default function Header() {
   const fetchCart = useCartStore((state) => state.fetchCart);
   const clearLocalCart = useCartStore((state) => state.clearLocalCart);
   const [mobileOpen, setMobileOpen] = useState(false);
-
   useEffect(() => {
     if (status === "authenticated") {
       fetchCart();
     }
-
     if (status === "unauthenticated") {
       clearLocalCart();
     }
   }, [status, fetchCart, clearLocalCart]);
-
   useEffect(() => {
     if (!mobileOpen) return;
-
     const handleResize = () => {
       if (window.innerWidth >= 1024) setMobileOpen(false);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [mobileOpen]);
-
   const cartCount = cart?.item_count || 0;
-
   return (
-    <header className="bb-header fixed left-0 top-0 z-[999] w-full border-b border-[#eee] bg-white/95 shadow-sm backdrop-blur-md">
-      <div className="py-5 max-[991px]:py-4">
+    <header className="bb-header relative z-[1000] w-full border-b border-[#eee] bg-white/95 shadow-sm backdrop-blur-md">
+      <div className="py-4 max-[575px]:py-3 lg:py-5">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-8 px-4 max-[767px]:gap-4">
           <Link href="/" className="flex shrink-0 items-center gap-2">
             <img
               src="/assets/img/logo/logo-icon2.png"
               alt="2gooD Logo"
-              className="h-20 w-20 shrink-0 object-contain transition-transform duration-300 hover:scale-105 max-[575px]:h-16 max-[575px]:w-16"
+              className="h-16 w-16 shrink-0 object-contain transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20"
             />
           </Link>
-
           <nav className="hidden items-center gap-10 font-Poppins text-[17px] font-semibold text-[#3d4750] lg:flex">
             {" "}
             {navItems.map((item) => (
@@ -70,30 +58,10 @@ export default function Header() {
               </div>
             ))}
           </nav>
-
           <div className="flex shrink-0 items-center gap-5 max-[575px]:gap-4">
             <div className="group relative">
-              {/* <button
-                type="button"
-                className="text-[#3d4750] transition hover:text-[#0f766e]"
-                aria-label="Account"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </button> */}
-
+              {
+}
               <ul className="invisible absolute right-0 top-full z-30 mt-4 min-w-[190px] rounded-[10px] border border-[#eee] bg-white p-2 opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100">
                 {status === "authenticated" ? (
                   <>
@@ -140,47 +108,21 @@ export default function Header() {
                 )}
               </ul>
             </div>
-{/* 
-            <button
-              type="button"
-              onClick={toggleCart}
-              className="relative text-[#3d4750] transition hover:text-[#0f766e]"
-              aria-label="Cart"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#0f766e] text-[11px] font-bold text-white">
-                {cartCount}
-              </span>
-            </button> */}
+{
+}
             <a
               href="tel:+919967399880"
               className="hidden lg:flex items-center gap-3 rounded-full bg-[#0f766e] px-4 py-2 text-white shadow-md transition hover:bg-[#0d5f59]"
             >
               <i className="ri-phone-fill text-lg text-white" />
               <div className="leading-tight">
-                
-                
                 <p className="text-xs text-white">+91 99673 99880</p>
               </div>
             </a>
-
-            <button
+            {/* <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="hidden text-[#3d4750] transition hover:text-[#0f766e] max-lg:block"
+              className="hidden h-10 w-10 items-center justify-center rounded-full text-[#3d4750] transition hover:bg-[#f0fdfa] hover:text-[#0f766e] max-lg:flex"
               aria-label="Open menu"
             >
               <svg
@@ -197,18 +139,17 @@ export default function Header() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
-
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[60] overflow-y-auto bg-black/70 lg:hidden"
+          className="fixed inset-0 z-[9999] overflow-y-auto bg-black/50 lg:hidden"
           onClick={() => setMobileOpen(false)}
         >
           <aside
-            className="h-full w-[340px] max-w-[85vw] overflow-y-auto bg-white px-5 py-4 shadow-2xl"
+            className="relative z-[10000] h-dvh w-[320px] max-w-[86vw] overflow-y-auto bg-white px-5 py-4 shadow-2xl"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex items-center justify-between border-b border-[#eee] pb-3">
@@ -227,7 +168,6 @@ export default function Header() {
                 ×
               </button>
             </div>
-
             <ul>
               {navItems.map((item) => (
                 <li key={item.label} className="mb-3">
@@ -238,25 +178,10 @@ export default function Header() {
                   >
                     {item.label}
                   </Link>
-                  {/* 
-                  {item.children?.length ? (
-                    <ul className="ml-3 mt-2">
-                      {item.children.map((child) => (
-                        <li key={child.href}>
-                          <Link
-                            href={child.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="block py-2 pl-3 text-sm text-[#777] hover:text-[#0f766e]"
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null} */}
+                  {
+}
                 </li>
               ))}
-
               {status === "authenticated" ? (
                 <>
                   <li className="mb-3">

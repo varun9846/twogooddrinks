@@ -5357,8 +5357,7 @@ export default function HomePage() {
             alt="2goodplus packaged drinking water"
             className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-35 sm:object-center sm:opacity-100"
           />
-          {}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/80 to-transparent sm:bg-gradient-to-r sm:from-white/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/82 to-white/55 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/65 sm:to-transparent" />
           <div className="relative z-10 mx-auto flex min-h-[unset] max-w-7xl items-center px-4 py-10 sm:min-h-[420px] sm:px-6 sm:py-14 lg:min-h-[500px] lg:py-16">
             <div className="w-full max-w-[620px] text-center sm:text-left">
               <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#0f766e] sm:mb-4 sm:text-sm">
@@ -5389,12 +5388,13 @@ export default function HomePage() {
         </div>
       </section>
       <WaterWaveDivider />
-      <section className="mx-auto max-w-7xl px-4 py-10 md:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         <SectionHeading
           eyebrow="Water solutions"
           title="Packaged drinking water for homes, offices, and everyday use."
         />
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        {}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {categories.map((category) => (
             <Link
               href="/shop"

@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import AboutSection from "@/components/common/AboutSection";
@@ -11,7 +10,6 @@ import {
   productsService,
   type ProductApiResponse,
 } from "@/lib/services/productsService";
-
 const categories = [
   {
     title: "Packaged Drinking Water",
@@ -38,7 +36,6 @@ const categories = [
     color: "bg-[#fff9e6]",
   },
 ];
-
 const bulkOrderItems = [
   "Corporate Orders",
   "Events & Weddings",
@@ -46,7 +43,6 @@ const bulkOrderItems = [
   "Retailers & Distributors",
   "Schools & Institutions",
 ];
-
 function SectionHeading({
   eyebrow,
   title,
@@ -70,14 +66,11 @@ function SectionHeading({
     </div>
   );
 }
-
 export default function HomePage() {
   const [products, setProducts] = useState<ProductApiResponse[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     let cancelled = false;
-
     async function loadProducts() {
       try {
         const data = await productsService.getAllProducts();
@@ -88,17 +81,13 @@ export default function HomePage() {
         if (!cancelled) setLoading(false);
       }
     }
-
     loadProducts();
-
     return () => {
       cancelled = true;
     };
   }, []);
-
   const featuredProducts = useMemo(() => products.slice(0, 4), [products]);
   const newArrivals = useMemo(() => products.slice(8, 12), [products]);
-
   return (
     <main className="overflow-hidden pb-6">
       <section className="water-ripple relative isolate overflow-hidden bg-[#f6f7ff]">
@@ -109,23 +98,18 @@ export default function HomePage() {
             alt="2goodplus packaged drinking water"
             className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-35 sm:object-center sm:opacity-100"
           />
-
           <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/82 to-white/55 sm:bg-gradient-to-r sm:from-white/95 sm:via-white/65 sm:to-transparent" />
-
           <div className="relative z-10 mx-auto flex min-h-[unset] max-w-7xl items-center px-4 py-10 sm:min-h-[420px] sm:px-6 sm:py-14 lg:min-h-[500px] lg:py-16">
             <div className="w-full max-w-[620px] text-center sm:text-left">
               <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#0f766e] sm:mb-4 sm:text-sm">
                 {homeContent.hero.eyebrow}
               </p>
-
               <h1 className="mb-4 text-[clamp(32px,11vw,44px)] font-bold leading-[1.08] text-[#3d4750] sm:text-[54px] lg:text-[68px]">
                 <span className="text-[#0f766e]">Pure Water. Pure Life.</span>
               </h1>
-
               <p className="mx-auto max-w-xl text-sm leading-7 text-slate-700 sm:mx-0 sm:text-base sm:leading-8 lg:text-lg">
                 {homeContent.hero.description}
               </p>
-
               <div className="mt-6 flex w-full flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-4">
                 <Link
                   href={homeContent.hero.ctaHref}
@@ -133,7 +117,6 @@ export default function HomePage() {
                 >
                   {homeContent.hero.ctaLabel}
                 </Link>
-
                 <Link
                   href={homeContent.hero.secondaryCtaHref}
                   className="water-ripple relative inline-flex w-full items-center justify-center overflow-hidden rounded-full border border-[#0f766e]/30 bg-white/95 px-6 py-3.5 text-sm font-semibold !text-[#0f172a] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#0f766e] hover:!text-white sm:w-auto sm:px-7 sm:py-4 sm:text-base"
@@ -145,16 +128,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-  
       <WaterWaveDivider />
-
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
         <SectionHeading
           eyebrow="Water solutions"
           title="Packaged drinking water for homes, offices, and everyday use."
         />
-
-        {/* Added a margin-top (mt-12) to ensure breathing room below your heading */}
+        {}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {categories.map((category) => (
             <Link
@@ -162,7 +142,7 @@ export default function HomePage() {
               key={category.title}
               className={`${category.color} group flex flex-col items-center rounded-[28px] p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:p-8`}
             >
-              {/* NEW IMAGE WRAPPER */}
+              {}
               <div className="mb-6 w-full max-w-[220px] aspect-video overflow-hidden rounded-2xl shadow-sm bg-white/50">
                 <img
                   src={category.icon}
@@ -182,9 +162,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
       <WaterWaveDivider />
-
       <section className="relative overflow-hidden bg-white py-4">
         <WaterDroplets />
         <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-6">
@@ -213,13 +191,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       <WaterWaveDivider />
       <AboutSection variant="home" />
       <WaterWaveDivider />
       <DeliveryCoverage />
       <WaterWaveDivider />
-
       <section className="relative overflow-hidden bg-[#f8fafc] px-4 py-16 md:px-6 md:py-20">
         <WaterDroplets />
         <div className="relative z-10 mx-auto max-w-7xl">
@@ -236,7 +212,6 @@ export default function HomePage() {
                 and distributors. Bulk order rates and dealership pricing are
                 negotiable based on quantity requirements.
               </p>
-
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href="/contact-us"
@@ -252,7 +227,6 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-
             <div className="rounded-[32px] bg-[#0f766e] p-6 text-white shadow-[0_20px_55px_rgba(15,118,110,0.22)] sm:p-8 lg:p-10">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
@@ -267,7 +241,6 @@ export default function HomePage() {
                   💧
                 </span>
               </div>
-
               <div className="grid gap-3 sm:grid-cols-2">
                 {bulkOrderItems.map((item) => (
                   <div
@@ -281,7 +254,6 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-
               <div className="mt-7 rounded-3xl bg-white/10 p-5 ring-1 ring-white/15">
                 <p className="text-sm leading-7 text-white/85">
                   Contact us with your quantity requirement, delivery location,
@@ -293,22 +265,19 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       <WaterWaveDivider />
-
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-16 md:grid-cols-2 md:px-6">
-        {/* Card 1: Residential */}
+        {}
         <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#edf1ff] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
-          {/* Background Image */}
+          {}
           <img
             src="/assets/img/category/1.png"
             alt="Packaged drinking water for home"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          {/* Gradient Overlay for Text Readability */}
+          {}
           <div className="absolute inset-0 bg-gradient-to-r from-[#edf1ff]/95 via-[#edf1ff]/80 to-transparent sm:from-[#edf1ff]/90"></div>
-
-          {/* Content */}
+          {}
           <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
             <div className="max-w-md">
               <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
@@ -331,16 +300,13 @@ export default function HomePage() {
             </div>
           </div>
         </article>
-
         <article className="group relative flex min-h-[320px] w-full overflow-hidden rounded-3xl bg-[#fff7ea] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:min-h-[380px]">
           <img
             src="/assets/img/category/2.png"
             alt="Bulk packaged water delivery"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-
           <div className="absolute inset-0 bg-gradient-to-r from-[#fff7ea]/95 via-[#fff7ea]/80 to-transparent sm:from-[#fff7ea]/90"></div>
-
           <div className="relative z-10 flex w-full flex-col justify-center p-6 sm:p-10">
             <div className="max-w-md">
               <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-[#0f766e]">
@@ -365,7 +331,6 @@ export default function HomePage() {
           </div>
         </article>
       </section>
-
       <section className="mx-auto max-w-7xl px-4 pb-12 pt-16 md:px-6">
         <div className="water-ripple group relative overflow-hidden rounded-[24px] bg-[#0f766e] p-8 shadow-[0_15px_35px_rgba(108,127,216,0.25)] md:p-14">
           <WaterDroplets />
